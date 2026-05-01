@@ -46,9 +46,9 @@
           <h4>Liens rapides</h4>
           <ul>
             <li><a href="index.html">Accueil</a></li>
-            <li><a href="programmation.html">Programmation</a></li>
-            <li><a href="association.html">L'association</a></li>
-            <li><a href="newsletters.html">Newsletters</a></li>
+            <li><span style="opacity:0.4;cursor:default;">Programmation</span></li>
+            <li><span style="opacity:0.4;cursor:default;">L'association</span></li>
+            <li><span style="opacity:0.4;cursor:default;">Newsletters</span></li>
           </ul>
         </div>
 

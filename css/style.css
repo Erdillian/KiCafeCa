@@ -560,6 +560,12 @@ li { margin-bottom: 0.5rem; }
   cursor: default;
 }
 
+.btn.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+  cursor: default;
+}
+
 /* Desktop */
 @media (min-width: 768px) {
   .nav-toggle {
