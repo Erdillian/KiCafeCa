@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Newsletter KiCaféÇa - Mai 2026</title>
+  <meta name="description" content="Newsletter du KiCaféÇa - Mai 2026. Planning complet des activités, événements spéciaux et journée jeux.">
+  <link rel="icon" type="image/png" href="../images/Logo.png">
+  <link rel="apple-touch-icon" href="../images/Logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* Styles spécifiques pour la newsletter */
+    .newsletter-content {
+      background: #fff;
+      padding: var(--spacing-xl) 0;
+    }
+    .newsletter-meta {
+      text-align: center;
+      margin-bottom: var(--spacing-xl);
+      color: var(--ink-light);
+    }
+    .newsletter-meta .issue-number {
+      display: inline-block;
+      background: var(--terracotta);
+      color: #fff;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-full);
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .nl-section {
+      margin-bottom: var(--spacing-xl);
+    }
+    .nl-section h2 {
+      font-size: 1.5rem;
+      color: var(--terracotta);
+      border-bottom: 2px solid var(--warmth);
+      padding-bottom: var(--spacing-sm);
+    }
+    .calendar-container {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      margin: var(--spacing-md) 0;
+    }
+    .calendar-header {
+      background: var(--terracotta);
+      display: flex;
+      align-items: center;
+      padding: var(--spacing-md) var(--spacing-lg);
+      gap: var(--spacing-md);
+    }
+    .calendar-logo {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    .calendar-title h1 {
+      font-family: 'Caveat', cursive;
+      font-size: 2.5rem;
+      color: #fff;
+      line-height: 1.1;
+      margin: 0;
+    }
+    .calendar-title p {
+      font-size: 0.875rem;
+      color: var(--blush);
+      margin-top: 4px;
+    }
+    .calendar-grid {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      margin: 0;
+    }
+    .calendar-grid thead th {
+      background: var(--ink);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: var(--spacing-sm) var(--spacing-xs);
+      text-align: center;
+    }
+    .calendar-grid tbody td {
+      border: 1px solid #ddd3c5;
+      vertical-align: top;
+      padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-sm);
+      height: 100px;
+      background: #fff;
+    }
+    .calendar-grid tbody td:empty {
+      background: #f3ede4;
+    }
+    .calendar-grid tbody td.outside {
+      background: #eae3d8;
+      color: #ccc;
+    }
+    .day-num {
+      font-weight: 700;
+      font-size: 1.125rem;
+      color: var(--ink);
+      margin-bottom: var(--spacing-xs);
+      line-height: 1;
+    }
+    .event {
+      display: block;
+      padding: 3px 7px;
+      border-radius: 5px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      line-height: 1.35;
+      margin-bottom: 3px;
+      word-wrap: break-word;
+    }
+    .event:last-child { margin-bottom: 0; }
+
+    .ev-ouverture {
+      background: none;
+      color: var(--ink-light);
+      font-style: italic;
+      padding: 0 7px;
+      border: 1px dashed #ccc;
+    }
+    .ev-recurrent {
+      background: var(--gold-light);
+      color: var(--ink);
+    }
+    .ev-nouveau {
+      background: var(--lavender);
+      color: #fff;
+    }
+    .ev-special {
+      background: var(--sky);
+      color: #fff;
+    }
+    .ev-jeu {
+      background: var(--mint);
+      color: #fff;
+    }
+    .calendar-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-lg);
+      padding: var(--spacing-lg) var(--spacing-xl);
+      background: var(--warmth);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      align-items: center;
+      justify-content: center;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.875rem;
+      color: var(--ink-light);
+      font-weight: 500;
+    }
+    .legend-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .legend-note {
+      margin-left: 0;
+      font-size: 0.8125rem;
+      color: var(--terracotta);
+      font-weight: 600;
+      margin-top: var(--spacing-sm);
+      width: 100%;
+      text-align: center;
+    }
+    .nl-notice {
+      background: var(--gold-light);
+      padding: var(--spacing-md);
+      border-radius: var(--radius-md);
+      margin-top: var(--spacing-md);
+      border-left: 4px solid var(--gold);
+    }
+    .nl-notice p {
+      margin: 0;
+      color: var(--ink);
+      font-size: 0.9375rem;
+    }
+    @media (max-width: 768px) {
+      .calendar-header {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-sm);
+      }
+      .calendar-logo { width: 40px; height: 40px; }
+      .calendar-title h1 { font-size: 1.75rem; }
+      .calendar-grid tbody td { height: auto; padding: var(--spacing-xs); }
+      .day-num { font-size: 1rem; }
+      .event { font-size: 0.7rem; padding: 2px 5px; }
+      .calendar-legend {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        text-align: center;
+      }
+      .legend-note { margin-top: var(--spacing-sm); }
+    }
+    @media (max-width: 480px) {
+      .calendar-header { padding: var(--spacing-sm); }
+      .calendar-title h1 { font-size: 1.5rem; }
+      .calendar-grid thead th { font-size: 0.625rem; padding: 4px; }
+      .calendar-grid tbody td { height: 80px; padding: 2px; }
+      .day-num { font-size: 0.875rem; }
+      .event { font-size: 0.65rem; }
+    }
+    @media (max-width: 640px) {
+      .newsletter-content { padding: var(--spacing-md) 0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Header -->
+  <header class="site-header">
+    <div class="header-top">
+      <div class="container">
+        <p>Café associatif · Joyeuse, Ardèche</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="site-branding">
+        <a href="../index.html" class="site-logo">
+          <img src="../images/Logo.png" alt="Logo KiCaféÇa" width="60" height="60">
+        </a>
+        <h1 class="site-title"><a href="../index.html">KiCaféÇa</a></h1>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="Menu principal">
+      <button class="nav-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Menu mobile">
+        <span class="visually-hidden">Menu</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <ul class="nav-list" id="main-nav">
+        <li class="nav-item"><a class="nav-link" href="../index.html">Accueil</a></li>
+        <li class="nav-item"><a class="nav-link" href="../programmation.html">Programmation</a></li>
+        <li class="nav-item"><a class="nav-link" href="../association.html">L'association</a></li>
+        <li class="nav-item"><a class="nav-link active" href="newsletters.html">Newsletters</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero Newsletter -->
+  <section class="newsletter-hero">
+    <div class="container">
+      <h1>Newsletter KiCaféÇa</h1>
+      <p class="newsletter-meta"><span class="issue-number">Mai 2026 - N°4</span></p>
+      <p class="hero-baseline">Le café associatif vous raconte sa vie</p>
+    </div>
+  </section>
+
+  <!-- Newsletter Content -->
+  <main class="container newsletter-content">
+    <article class="nl-article">
+      <div class="nl-section">
+        <h2>Planning mai 2026</h2>
+        <p>Retrouvez ci-dessous le planning complet des activités pour le mois de mai. Toutes les activités sont à prix libre et ouvertes à toustes !</p>
+
+        <div class="calendar-container">
+          <div class="calendar-header">
+            <img src="../images/Logo.png" alt="Logo KiCaféÇa" class="calendar-logo">
+            <div class="calendar-title">
+              <h1>Programmation Mai 2026</h1>
+              <p>KiCaféÇa &middot; Joyeuse, Ardèche</p>
+            </div>
+            <div class="calendar-right" style="margin-left: auto; text-align: right;">
+              <p style="font-size: 0.875rem; color: var(--gold-light);">Adhésion obligatoire, à prix libre</p>
+            </div>
+          </div>
+
+          <table class="calendar-grid">
+            <thead>
+              <tr>
+                <th>Lundi</th>
+                <th>Mardi</th>
+                <th>Mercredi</th>
+                <th>Jeudi</th>
+                <th>Vendredi</th>
+                <th>Samedi</th>
+                <th>Dimanche</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Semaine 1 : 1 mai = vendredi -->
+              <tr>
+                <td class="outside"></td>
+                <td class="outside"></td>
+                <td class="outside"></td>
+                <td class="outside"></td>
+                <td class="outside"></td>
+                <td>
+                  <div class="day-num">2</div>
+                  <span class="event ev-nouveau">9h-12h <strong>Modèle Vivant</strong> <em>(Vera)</em></span>
+                </td>
+                <td class="empty">
+                  <div class="day-num">3</div>
+                </td>
+              </tr>
+              <!-- Semaine 2 -->
+              <tr>
+                <td class="empty">
+                  <div class="day-num">4</div>
+                </td>
+                <td>
+                  <div class="day-num">5</div>
+                  <span class="event ev-nouveau">19h30-21h <strong>Théâtre Forum</strong> <em>(Morgane)</em></span>
+                </td>
+                <td>
+                  <div class="day-num">6</div>
+                  <span class="event ev-ouverture">Ouvert 11h</span>
+                </td>
+                <td>
+                  <div class="day-num">7</div>
+                  <span class="event ev-special">⭐ 18h30 <strong>Conférence Gesticulée</strong> "Pourquoi t'es pas partie ?" <em>(Maritchu)</em></span>
+                </td>
+                <td class="empty">
+                  <div class="day-num">8</div>
+                </td>
+                <td class="empty">
+                  <div class="day-num">9</div>
+                </td>
+                <td>
+                  <div class="day-num">10</div>
+                  <span class="event ev-ouverture">Ouvert 11h</span>
+                  <span class="event ev-jeu"><strong>Journée Jeux</strong></span>
+                </td>
+              </tr>
+              <!-- Semaine 3 -->
+              <tr>
+                <td>
+                  <div class="day-num">11</div>
+                  <span class="event ev-recurrent">19h-20h30 <strong>Chorale Chants Polyphoniques</strong> <em>(Cécile)</em></span>
+                </td>
+                <td class="empty">
+                  <div class="day-num">12</div>
+                </td>
+                <td>
+                  <div class="day-num">13</div>
+                  <span class="event ev-ouverture">Ouvert 11h</span>
+                </td>
+                <td>
+                  <div class="day-num">14</div>
+                  <span class="event ev-recurrent">18h30-21h <strong>Capoeira Angola</strong> <em>(Julien)</em></span>
+                </td>
+                <td>
+                  <div class="day-num">15</div>
+                  <span class="event ev-recurrent">17h30-21h30 <strong>Théâtre Impro</strong> <em>(Blaise)</em></span>
+                </td>
+                <td class="empty">
+                  <div class="day-num">16</div>
+                </td>
+                <td>
+                  <div class="day-num">17</div>
+                  <span class="event ev-ouverture">Ouvert 11h</span>
+                  <span class="event ev-jeu"><strong>Jeu de Rôle</strong></span>
+                </td>
+              </tr>
+              <!-- Semaine 4 -->
+              <tr>
+                <td class="empty">
+                  <div class="day-num">18</div>
+                </td>
+                <td>
+                  <div class="day-num">19</div>
+                  <span class="event ev-special">⭐ 19h30-21h30 <strong>Projection/Débat</strong> documentaire de Blast</span>
+                </td>
+                <td>
+                  <div class="day-num">20</div>
+                  <span class="event ev-ouverture">Ouvert 11h</span>
+                </td>
+                <td>
+                  <div class="day-num">21</div>
+                  <span class="event ev-special">⭐ 19h-00h <strong>Jam Session</strong> <em>(Laurie)</em></span>
+                </td>
+                <td class="empty">
+                  <div class="day-num">22</div>
+                </td>
+                <td class="empty">
+                  <div class="day-num">23</div>
+                </td>
+                <td class="empty">
+                  <div class="day-num">24</div>
+                </td>
+              </tr>
+              <!-- Semaine 5 -->
+              <tr>
+                <td class="empty">
+                  <div class="day-num">25</div>
+                </td>
+                <td>
+                  <div class="day-num">26</div>
+                  <span class="event ev-nouveau">19h30-21h <strong>Théâtre Forum</strong> <em>(Morgane)</em></span>
+                </td>
+                <td>
+                  <div class="day-num">27</div>
+                  <span class="event ev-ouverture">Ouvert 11h</span>
+                  <span class="event ev-special">⭐ 16h-18h <strong>Chant pour tous / Circle Song</strong> <em>(Jinja/Maud)</em></span>
+                </td>
+                <td class="empty">
+                  <div class="day-num">28</div>
+                </td>
+                <td>
+                  <div class="day-num">29</div>
+                  <span class="event ev-recurrent">17h30-21h30 <strong>Théâtre Impro</strong> <em>(Blaise)</em></span>
+                </td>
+                <td>
+                  <div class="day-num">30</div>
+                  <span class="event ev-nouveau">9h-12h <strong>Modèle Vivant</strong> <em>(Vera)</em></span>
+                </td>
+                <td class="empty">
+                  <div class="day-num">31</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="calendar-legend">
+            <div class="legend-item"><div class="legend-dot" style="background: var(--lavender);"></div> Nouveau</div>
+            <div class="legend-item"><div class="legend-dot" style="background: var(--gold-light);"></div> Récurrents</div>
+            <div class="legend-item"><div class="legend-dot" style="background: var(--sky);"></div> ⭐ Événements</div>
+            <div class="legend-item"><div class="legend-dot" style="background: var(--mint);"></div> Journée Jeux / JDR</div>
+            <div class="legend-note">Ateliers, boissons et nourriture sont à prix libre !</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nl-section">
+        <h2>Pourquoi venir ?</h2>
+        <p>Le KiCaféÇa est un lieu de rencontre, d'échange et de création. Que vous veniez pour une activité ou simplement pour passer un moment, vous êtes les bienvenu.e.s.</p>
+        <p>Notre café est ouvert mercredi et dimanche de 11h à 18h, et nous proposons des activités du matin au soir selon les disponibilités des organisateurs.</p>
+      </div>
+    </article>
+
+    <div class="nl-notice">
+      <p><strong>L'adhésion à l'association est obligatoire</strong> pour participer aux activités. Elle est à prix libre et se fait sur place. Vos contributions permettent de maintenir le lieu et payer les dépenses courantes.</p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-grid">
+          <div class="footer-column">
+            <div class="footer-logo">
+              <img src="../images/Logo.png" alt="Logo KiCaféÇa" width="50" height="50">
+              <div>
+                <h4 class="mb-1">KiCaféÇa</h4>
+                <p>Café associatif</p>
+              </div>
+            </div>
+            <p>Un lieu FAIT PAR tout le monde<br>Pour toutes et tous</p>
+          </div>
+
+          <div class="footer-column">
+            <h4>Liens rapides</h4>
+            <ul>
+              <li><a href="../index.html">Accueil</a></li>
+              <li><a href="../programmation.html">Programmation</a></li>
+              <li><a href="../association.html">L'association</a></li>
+              <li><a href="newsletters.html">Newsletters</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-column">
+            <h4>Contact</h4>
+            <p>Pour toute question ou proposition d'activité :</p>
+            <p class="mt-2">Envoyez-nous un mail</p>
+            <p>ou passez voir au café !</p>
+          </div>
+
+          <div class="footer-column footer-map">
+            <h4>Carte</h4>
+            <div class="mt-2">
+              <iframe
+                src="https://www.openstreetmap.org/export/embed.html?bbox=4.65%2C44.75%2C4.75%2C44.80&amp;layer=mapnik"
+                width="100%"
+                height="150"
+                style="border:0; border-radius: var(--radius-md);"
+                allowfullscreen
+                loading="lazy">
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>
+          &copy; 2026 KiCaféÇa — Café associatif à Joyeuse, Ardèche
+          <br>
+          Hébergé sur GitHub Pages
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

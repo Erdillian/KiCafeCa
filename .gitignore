@@ -23,3 +23,13 @@ desktop.ini
 # Node (si jamais on utilise des outils de dev locaux)
 node_modules/
 npm-debug.log*
+
+# Outils de dev locaux
+.playwright-mcp/
+
+# Captures d'écran et docs de travail
+*-initial.png
+screenshot-*.png
+screenshots/
+plan.txt
+problemes.txt

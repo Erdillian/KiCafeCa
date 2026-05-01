@@ -3,9 +3,138 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KiCaféCa — En construction</title>
+  <title>KiCaféÇa — Café associatif à Joyeuse, Ardèche</title>
+  <meta name="description" content="KiCaféÇa est un café associatif à Joyeuse en Ardèche. Un lieu qu'on veut associatif, intergénérationnel et ouvert à toutes les initiatives. Venez passer l'hiver, échanger, créer du lien et participer à des activités collectives.">
+  <meta name="author" content="KiCaféÇa">
+  <meta name="keywords" content="kicafeca, café associatif, joyeuse, ardèche, atelier, éducation populaire, intergénérationnel">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="KiCaféÇa — Café associatif à Joyeuse">
+  <meta property="og:description" content="Un espace d'échange, un salon commun pour passer l'hiver. Lieu associatif, intergénérationnel et ouvert à toutes les initiatives.">
+  <meta property="og:url" content="https://www.kicafeca.fr/">
+  <meta property="og:image" content="https://www.kicafeca.fr/images/Logo.png">
+  <meta property="og:image:width" content="200">
+  <meta property="og:image:height" content="200">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="images/Logo.png">
+  <link rel="apple-touch-icon" href="images/Logo.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <h1>En construction</h1>
+  <div id="header-placeholder"></div>
+  <script src="js/components.js"></script>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-logo mb-3">
+          <img src="images/Logo.png" alt="Logo KiCaféÇa" width="120" height="120">
+        </div>
+        <h1>KiCaféÇa</h1>
+        <p class="hero-baseline">Café associatif · Joyeuse, Ardèche</p>
+        <p class="hero-accroche">
+          <strong>Un espace d'échange, un salon commun pour passer l'hiver.</strong><br>
+          Un lieu qu'on veut associatif, intergénérationnel et ouvert à toutes les initiatives.
+          <br>
+          <strong>Un lieu FAIT PAR tout le monde.</strong>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cards Section -->
+  <section class="section features" id="card-programmation">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Ce qu'on propose</h2>
+        <p class="section-subtitle">Découvrez nos activités, notre association et nos newsletters</p>
+      </div>
+
+      <div class="row row-cols-1 row-cols-3">
+        <!-- Card 1: Programmation -->
+        <article class="card feature-item">
+          <div class="feature-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 3v18h18"></path>
+              <path d="M18 17V9"></path>
+              <path d="M13 17V5"></path>
+              <path d="M8 17v-3"></path>
+            </svg>
+          </div>
+          <h3 class="mb-2">Programmation</h3>
+          <p class="mb-4">Ateliers, conférences, jeux, et événements speciaux tout au long de l'année.</p>
+          <a href="programmation.html" class="btn btn-secondary btn-small">Voir le planning</a>
+        </article>
+
+        <!-- Card 2: L'association -->
+        <article class="card feature-item">
+          <div class="feature-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <h3 class="mb-2">L'association</h3>
+          <p class="mb-4">Qui sommes-nous ? Nos valeurs, notre fonctionnement et notre charte.</p>
+          <a href="association.html" class="btn btn-secondary btn-small">En savoir plus</a>
+        </article>
+
+        <!-- Card 3: Newsletters -->
+        <article class="card feature-item">
+          <div class="feature-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </div>
+          <h3 class="mb-2">Newsletters</h3>
+          <p class="mb-4">Suivez l'actualité du café avec nos newsletters mensuelles.</p>
+          <a href="newsletters.html" class="btn btn-secondary btn-small">Lire les newsletters</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Informations Pratiques -->
+  <section class="section" id="pratique" style="background: var(--cream);">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Infos pratiques</h2>
+      </div>
+
+      <div class="row row-cols-1 row-cols-2">
+        <div class="card">
+          <h3 class="mb-3">Où nous trouver ?</h3>
+          <p class="mb-3">
+            <strong>KiCaféÇa</strong><br>
+            79 route nationale<br>
+            Joyeuse, Ardèche
+          </p>
+          <p class="text-small">
+            <a href="https://www.openstreetmap.org/search?query=79+route+nationale+Joyeuse" target="_blank" rel="noopener">Voir sur OpenStreetMap</a>
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 class="mb-3">Adhésion</h3>
+          <p>L'adhésion à l'association est obligatoire. Elle est à prix libre et se fait sur place. Vos contributions permettent de maintenir le lieu et payer les dépenses courantes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="js/main.js"></script>
 </body>
 </html>

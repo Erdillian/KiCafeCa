@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Newsletters - KiCaféÇa</title>
+  <meta name="description" content="Archives des newsletters mensuelles du KiCaféÇa. Suivez l'actualité du café associatif à Joyeuse.">
+  <link rel="icon" type="image/png" href="../images/Logo.png">
+  <link rel="apple-touch-icon" href="../images/Logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .archives-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--spacing-lg);
+      margin-top: var(--spacing-xl);
+    }
+    .archive-card {
+      background: var(--cream);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    .archive-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+    .archive-header {
+      background: var(--warmth);
+      padding: var(--spacing-lg);
+      text-align: center;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    .archive-issue {
+      display: inline-block;
+      background: var(--terracotta);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: var(--spacing-sm);
+    }
+    .archive-title {
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
+      color: var(--ink);
+      margin: 0;
+    }
+    .archive-date {
+      color: var(--ink-light);
+      font-size: 1rem;
+    }
+    .archive-preview {
+      padding: var(--spacing-md) var(--spacing-lg);
+    }
+    .archive-preview p {
+      color: var(--ink-light);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+    .archive-link {
+      display: block;
+      text-align: center;
+      background: var(--ink);
+      color: var(--cream);
+      padding: var(--spacing-md);
+      text-decoration: none;
+      font-weight: 600;
+      transition: background var(--transition-fast);
+    }
+    .archive-link:hover {
+      background: var(--terracotta);
+    }
+    .newsletter-hero h1 {
+      font-size: 2.5rem;
+    }
+    @media (max-width: 640px) {
+      .newsletter-hero h1 { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Header -->
+  <header class="site-header">
+    <div class="header-top">
+      <div class="container">
+        <p>Café associatif · Joyeuse, Ardèche</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="site-branding">
+        <a href="../index.html" class="site-logo">
+          <img src="../images/Logo.png" alt="Logo KiCaféÇa" width="60" height="60">
+        </a>
+        <h1 class="site-title"><a href="../index.html">KiCaféÇa</a></h1>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="Menu principal">
+      <button class="nav-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Menu mobile">
+        <span class="visually-hidden">Menu</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <ul class="nav-list" id="main-nav">
+        <li class="nav-item"><a class="nav-link" href="../index.html">Accueil</a></li>
+        <li class="nav-item"><a class="nav-link" href="../programmation.html">Programmation</a></li>
+        <li class="nav-item"><a class="nav-link" href="../association.html">L'association</a></li>
+        <li class="nav-item"><a class="nav-link active" href="newsletters.html">Newsletters</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero Newsletter -->
+  <section class="newsletter-hero">
+    <div class="container">
+      <h1>Archives des Newsletters</h1>
+      <p class="hero-baseline">Suivez l'actualité du café associatif</p>
+    </div>
+  </section>
+
+  <!-- Archives Grid -->
+  <main class="container">
+    <div class="section-header text-center mb-4">
+      <h2 class="section-title">Les newsletters</h2>
+      <p class="section-subtitle">Retrouvez toutes nos publications mensuelles</p>
+    </div>
+
+    <div class="archives-grid">
+      <!-- NL4 -->
+      <article class="archive-card">
+        <div class="archive-header">
+          <span class="archive-issue">Mai 2026 - N°4</span>
+          <h3 class="archive-title">Planning Mai 2026</h3>
+          <p class="archive-date">Programmation complète avec calendrier</p>
+        </div>
+        <div class="archive-preview">
+          <p>Planning complet du mois de mai avec modèle vivant, théâtre forum, conférence gesticulée, jeux de rôle et bien plus.</p>
+        </div>
+        <a href="NL4.html" class="archive-link">Lire la newsletter</a>
+      </article>
+
+      <!-- NL3 -->
+      <article class="archive-card">
+        <div class="archive-header">
+          <span class="archive-issue">Avril 2026 - N°3</span>
+          <h3 class="archive-title">Newsletter Avril 2026</h3>
+          <p class="archive-date">Retour sur mars et planning avril</p>
+        </div>
+        <div class="archive-preview">
+          <p>Retour sur les activités de mars, projection de documentaire, et nouveau planning pour avril avec théâtre d'impro, atelier écriture et conférences.</p>
+        </div>
+        <a href="NL3.html" class="archive-link">Lire la newsletter</a>
+      </article>
+
+      <!-- NL2 -->
+      <article class="archive-card">
+        <div class="archive-header">
+          <span class="archive-issue">Mars 2026 - N°2</span>
+          <h3 class="archive-title">Newsletter Mars 2026</h3>
+          <p class="archive-date">Appel à coups de main</p>
+        </div>
+        <div class="archive-preview">
+          <p>Besoin de four, micro-ondes, jeux de société, et autres objets pour poursuivre le projet. Planning Mars avec ateliers cuisine et tricot.</p>
+        </div>
+        <a href="NL2.html" class="archive-link">Lire la newsletter</a>
+      </article>
+
+      <!-- NL1 -->
+      <article class="archive-card">
+        <div class="archive-header">
+          <span class="archive-issue">Février 2026 - N°1</span>
+          <h3 class="archive-title">Newsletter Février 2026</h3>
+          <p class="archive-date">Lancement des permanences</p>
+        </div>
+        <div class="archive-preview">
+          <p>Grand merci pour l'ouverture du café, 111 adhésions. Permanences mercredi/dimanche et planning février avec capoeira, chorale, circle song, koifeur et twerk.</p>
+        </div>
+        <a href="NL1.html" class="archive-link">Lire la newsletter</a>
+      </article>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-grid">
+          <div class="footer-column">
+            <div class="footer-logo">
+              <img src="../images/Logo.png" alt="Logo KiCaféÇa" width="50" height="50">
+              <div>
+                <h4 class="mb-1">KiCaféÇa</h4>
+                <p>Café associatif</p>
+              </div>
+            </div>
+            <p>Un lieu FAIT PAR tout le monde<br>Pour toutes et tous</p>
+          </div>
+
+          <div class="footer-column">
+            <h4>Liens rapides</h4>
+            <ul>
+              <li><a href="../index.html">Accueil</a></li>
+              <li><a href="../programmation.html">Programmation</a></li>
+              <li><a href="../association.html">L'association</a></li>
+              <li><a href="newsletters.html">Newsletters</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-column">
+            <h4>Contact</h4>
+            <p>Pour toute question ou proposition d'activité :</p>
+            <p class="mt-2">Envoyez-nous un mail</p>
+            <p>ou passez voir au café !</p>
+          </div>
+
+          <div class="footer-column footer-map">
+            <h4>Carte</h4>
+            <div class="mt-2">
+              <iframe
+                src="https://www.openstreetmap.org/export/embed.html?bbox=4.65%2C44.75%2C4.75%2C44.80&amp;layer=mapnik"
+                width="100%"
+                height="150"
+                style="border:0; border-radius: var(--radius-md);"
+                allowfullscreen
+                loading="lazy">
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>
+          &copy; 2026 KiCaféÇa — Café associatif à Joyeuse, Ardèche
+          <br>
+          Hébergé sur GitHub Pages
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
