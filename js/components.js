@@ -18,9 +18,9 @@
       </button>
       <ul class="nav-list" id="main-nav">
         <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
-        <li class="nav-item"><span class="nav-link disabled">Programmation</span></li>
-        <li class="nav-item"><span class="nav-link disabled">L'association</span></li>
-        <li class="nav-item"><span class="nav-link disabled">Newsletters</span></li>
+        <li class="nav-item"><a class="nav-link" href="programmation.html">Programmation</a></li>
+        <li class="nav-item"><a class="nav-link" href="association.html">L'association</a></li>
+        <li class="nav-item"><a class="nav-link" href="newsletters.html">Newsletters</a></li>
       </ul>
     </nav>
   </div>
@@ -31,32 +31,24 @@
   <div class="container">
     <div class="footer-top">
       <div class="footer-grid">
-        <div class="footer-column">
-          <div class="footer-logo">
-            <img src="images/Logo.png" alt="Logo KiCaféÇa" width="50" height="50">
-            <div>
-              <h4 class="mb-1">KiCaféÇa</h4>
-              <p>Café associatif</p>
-            </div>
+        <div class="footer-column footer-brand">
+          <img src="images/Logo.png" alt="Logo KiCaféÇa" width="44" height="44">
+          <div>
+            <h4>KiCaféÇa</h4>
+            <p>Café associatif · Joyeuse</p>
           </div>
-          <p>Un lieu FAIT PAR tout le monde<br>Pour toutes et tous</p>
         </div>
 
-        <div class="footer-column">
-          <h4>Liens rapides</h4>
-          <ul>
-            <li><a href="index.html">Accueil</a></li>
-            <li><span style="opacity:0.4;cursor:default;">Programmation</span></li>
-            <li><span style="opacity:0.4;cursor:default;">L'association</span></li>
-            <li><span style="opacity:0.4;cursor:default;">Newsletters</span></li>
-          </ul>
+        <div class="footer-column footer-links">
+          <a href="index.html">Accueil</a>
+          <a href="programmation.html">Programmation</a>
+          <a href="association.html">L'association</a>
+          <a href="newsletters.html">Newsletters</a>
         </div>
 
-        <div class="footer-column">
-          <h4>Contact</h4>
-          <p>Pour toute question ou proposition d'activité :</p>
-          <p class="mt-2"><a href="mailto:kicafeca@etik.com">kicafeca@etik.com</a></p>
-          <p>ou passez voir au café !</p>
+        <div class="footer-column footer-contact">
+          <a href="mailto:kicafeca@etik.com">kicafeca@etik.com</a>
+          <span>ou passez voir au café !</span>
         </div>
       </div>
     </div>
