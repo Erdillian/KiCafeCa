@@ -21,6 +21,7 @@
   --gold-light: #F0D898;
   --gold-dark: #B88D41;
   --blush: #E8C4B8;
+  --sky: #7EAEC4;
   --lavender: #A88BC4;
   --mint: #6BBF8A;
 
@@ -262,7 +263,6 @@ li { margin-bottom: 0.5rem; }
 .page-association .card-static:hover {
   transform: none;
   box-shadow: var(--shadow-sm);
-  border-color: rgba(255, 255, 255, 0.3);
 }
 
 /* --- 5. BADGES --- */

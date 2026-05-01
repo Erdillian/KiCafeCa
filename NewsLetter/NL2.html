@@ -9,7 +9,7 @@
   <link rel="apple-touch-icon" href="../images/Logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <style>
     /* Styles spécifiques pour la newsletter */
@@ -101,40 +101,8 @@
   </style>
 </head>
 <body>
-  <!-- Navigation Header -->
-  <header class="site-header">
-    <div class="header-top">
-      <div class="container">
-        <p>Café associatif · Joyeuse, Ardèche</p>
-      </div>
-    </div>
-
-    <div class="container">
-      <div class="site-branding">
-        <a href="../index.html" class="site-logo">
-          <img src="../images/Logo.png" alt="Logo KiCaféÇa" width="60" height="60">
-        </a>
-        <h1 class="site-title"><a href="../index.html">KiCaféÇa</a></h1>
-      </div>
-    </div>
-
-    <nav class="nav" aria-label="Menu principal">
-      <button class="nav-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Menu mobile">
-        <span class="visually-hidden">Menu</span>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="3" y1="12" x2="21" y2="12"></line>
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
-      </button>
-      <ul class="nav-list" id="main-nav">
-        <li class="nav-item"><a class="nav-link" href="../index.html">Accueil</a></li>
-        <li class="nav-item"><a class="nav-link" href="../programmation.html">Programmation</a></li>
-        <li class="nav-item"><a class="nav-link" href="../association.html">L'association</a></li>
-        <li class="nav-item"><a class="nav-link active" href="newsletters.html">Newsletters</a></li>
-      </ul>
-    </nav>
-  </header>
+  <div id="header-placeholder"></div>
+  <script src="../js/components.js"></script>
 
   <!-- Hero Newsletter -->
   <section class="newsletter-hero">
@@ -204,65 +172,7 @@
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-top">
-        <div class="footer-grid">
-          <div class="footer-column">
-            <div class="footer-logo">
-              <img src="../images/Logo.png" alt="Logo KiCaféÇa" width="50" height="50">
-              <div>
-                <h4 class="mb-1">KiCaféÇa</h4>
-                <p>Café associatif</p>
-              </div>
-            </div>
-            <p>Un lieu FAIT PAR tout le monde<br>Pour toutes et tous</p>
-          </div>
-
-          <div class="footer-column">
-            <h4>Liens rapides</h4>
-            <ul>
-              <li><a href="../index.html">Accueil</a></li>
-              <li><a href="../programmation.html">Programmation</a></li>
-              <li><a href="../association.html">L'association</a></li>
-              <li><a href="newsletters.html">Newsletters</a></li>
-            </ul>
-          </div>
-
-          <div class="footer-column">
-            <h4>Contact</h4>
-            <p>Pour toute question ou proposition d'activité :</p>
-            <p class="mt-2">Envoyez-nous un mail</p>
-            <p>ou passez voir au café !</p>
-          </div>
-
-          <div class="footer-column footer-map">
-            <h4>Carte</h4>
-            <div class="mt-2">
-              <iframe
-                src="https://www.openstreetmap.org/export/embed.html?bbox=4.65%2C44.75%2C4.75%2C44.80&amp;layer=mapnik"
-                width="100%"
-                height="150"
-                style="border:0; border-radius: var(--radius-md);"
-                allowfullscreen
-                loading="lazy">
-              </iframe>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer-bottom">
-        <p>
-          &copy; 2026 KiCaféÇa — Café associatif à Joyeuse, Ardèche
-          <br>
-          Hébergé sur GitHub Pages
-        </p>
-      </div>
-    </div>
-  </footer>
-
+  <div id="footer-placeholder"></div>
   <script src="../js/main.js"></script>
 </body>
 </html>

@@ -4,8 +4,8 @@
   var headerHTML = `
 <header class="site-header">
   <div class="container header-inner">
-    <a href="index.html" class="site-branding">
-      <img src="images/Logo.png" alt="Logo KiCaféÇa" width="48" height="48">
+    <a href="/index.html" class="site-branding">
+      <img src="/images/Logo.png" alt="Logo KiCaféÇa" width="48" height="48">
       <span class="site-title">KiCaféÇa</span>
     </a>
     <nav class="nav" aria-label="Menu principal">
@@ -17,10 +17,10 @@
         </svg>
       </button>
       <ul class="nav-list" id="main-nav">
-        <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
-        <li class="nav-item"><a class="nav-link" href="programmation.html">Programmation</a></li>
-        <li class="nav-item"><a class="nav-link" href="association.html">L'association</a></li>
-        <li class="nav-item"><a class="nav-link" href="newsletters.html">Newsletters</a></li>
+        <li class="nav-item"><a class="nav-link" href="/index.html">Accueil</a></li>
+        <li class="nav-item"><a class="nav-link" href="/programmation.html">Programmation</a></li>
+        <li class="nav-item"><a class="nav-link" href="/association.html">L'association</a></li>
+        <li class="nav-item"><a class="nav-link" href="/newsletters.html">Newsletters</a></li>
       </ul>
     </nav>
   </div>
@@ -32,7 +32,7 @@
     <div class="footer-top">
       <div class="footer-grid">
         <div class="footer-column footer-brand">
-          <img src="images/Logo.png" alt="Logo KiCaféÇa" width="44" height="44">
+          <img src="/images/Logo.png" alt="Logo KiCaféÇa" width="44" height="44">
           <div>
             <h4>KiCaféÇa</h4>
             <p>Café associatif · Joyeuse</p>
@@ -40,10 +40,10 @@
         </div>
 
         <div class="footer-column footer-links">
-          <a href="index.html">Accueil</a>
-          <a href="programmation.html">Programmation</a>
-          <a href="association.html">L'association</a>
-          <a href="newsletters.html">Newsletters</a>
+          <a href="/index.html">Accueil</a>
+          <a href="/programmation.html">Programmation</a>
+          <a href="/association.html">L'association</a>
+          <a href="/newsletters.html">Newsletters</a>
         </div>
 
         <div class="footer-column footer-contact">
@@ -66,6 +66,14 @@
   </svg>
 </button>`;
 
+  function relativize(html) {
+    var path = window.location.pathname;
+    var dirs = path.split('/').slice(0, -1).filter(Boolean);
+    var prefix = dirs.map(function () { return '../'; }).join('');
+    return html.replace(/href="\//g, 'href="' + prefix)
+               .replace(/src="\//g, 'src="' + prefix);
+  }
+
   function inject(id, html) {
     var el = document.getElementById(id);
     if (!el) return false;
@@ -74,13 +82,13 @@
   }
 
   // Header : synchrone, le script est placé juste après le placeholder
-  inject('header-placeholder', headerHTML);
+  inject('header-placeholder', relativize(headerHTML));
 
   // Footer : le placeholder n'existe pas encore au moment de l'exécution,
   // on attend que le DOM soit complet
-  if (!inject('footer-placeholder', footerHTML)) {
+  if (!inject('footer-placeholder', relativize(footerHTML))) {
     document.addEventListener('DOMContentLoaded', function () {
-      inject('footer-placeholder', footerHTML);
+      inject('footer-placeholder', relativize(footerHTML));
     });
   }
 })();
