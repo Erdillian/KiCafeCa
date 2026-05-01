@@ -1,0 +1,25 @@
+# Claude Code (local)
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Fichiers temporaires
+*.tmp
+*.bak
+
+# Node (si jamais on utilise des outils de dev locaux)
+node_modules/
+npm-debug.log*
