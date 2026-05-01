@@ -18,9 +18,9 @@
       </button>
       <ul class="nav-list" id="main-nav">
         <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
-        <li class="nav-item"><a class="nav-link" href="programmation.html">Programmation</a></li>
-        <li class="nav-item"><a class="nav-link" href="association.html">L'association</a></li>
-        <li class="nav-item"><a class="nav-link" href="newsletters.html">Newsletters</a></li>
+        <li class="nav-item"><span class="nav-link disabled">Programmation</span></li>
+        <li class="nav-item"><span class="nav-link disabled">L'association</span></li>
+        <li class="nav-item"><span class="nav-link disabled">Newsletters</span></li>
       </ul>
     </nav>
   </div>
