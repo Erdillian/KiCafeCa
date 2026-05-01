@@ -867,6 +867,13 @@ li { margin-bottom: 0.5rem; }
 .value-item:nth-child(3) .value-icon { background: var(--gradient-olive); }
 .value-item:nth-child(4) .value-icon { background: var(--gradient-blush); }
 
+.charter-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
 .charter-number {
   display: inline-flex;
   align-items: center;
@@ -879,8 +886,8 @@ li { margin-bottom: 0.5rem; }
   font-family: var(--font-heading);
   font-size: 1.5rem;
   font-weight: 700;
-  margin-bottom: var(--spacing-md);
   box-shadow: 0 4px 12px rgba(196, 93, 62, 0.3);
+  flex-shrink: 0;
 }
 
 .intro-highlight {
