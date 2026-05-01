@@ -843,6 +843,13 @@ li { margin-bottom: 0.5rem; }
   margin: 0;
 }
 
+.value-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
 .value-icon {
   width: 56px;
   height: 56px;
@@ -851,8 +858,8 @@ li { margin-bottom: 0.5rem; }
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  margin-bottom: var(--spacing-md);
   box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
 }
 
 .value-item:nth-child(1) .value-icon { background: var(--gradient-terracotta); }
