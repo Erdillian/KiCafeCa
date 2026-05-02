@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Newsletter KiCaféÇa - Mai 2026</title>
+  <meta name="description" content="Newsletter du KiCaféÇa - Mai 2026. Ce qui change, retour sur avril, programme de mai et appels à coups de main.">
+  <link rel="icon" href="../../images/favicon.ico">
+  <link rel="apple-touch-icon" href="../../images/Logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    /* Styles spécifiques pour la newsletter */
+    .newsletter-content {
+      background: #fff;
+      padding: var(--spacing-xl) 0;
+    }
+    .newsletter-meta {
+      text-align: center;
+      margin-bottom: var(--spacing-xl);
+      color: var(--ink-light);
+    }
+    .newsletter-meta .issue-number {
+      display: inline-block;
+      background: var(--terracotta);
+      color: #fff;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-full);
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .nl-section {
+      margin-bottom: var(--spacing-xl);
+    }
+    .nl-section h2 {
+      font-size: 1.5rem;
+      color: var(--terracotta);
+      border-bottom: 2px solid var(--warmth);
+      padding-bottom: var(--spacing-sm);
+    }
+    .nl-box {
+      background: var(--warmth);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      margin: var(--spacing-md) 0;
+      border-left: 4px solid var(--terracotta);
+    }
+    .nl-box h3 {
+      margin-top: 0;
+      color: var(--ink);
+    }
+    .nl-highlights {
+      background: #F4E8D1;
+      border-radius: var(--radius-lg);
+      border-left: 4px solid var(--terracotta);
+      padding: var(--spacing-lg);
+      margin: var(--spacing-md) 0;
+    }
+    .nl-highlights p {
+      margin: 0 0 var(--spacing-sm) 0;
+      color: var(--ink);
+    }
+    .nl-highlights p strong {
+      color: var(--ink);
+    }
+    .nl-items-list {
+      list-style: none;
+      padding: 0;
+    }
+    .nl-items-list li {
+      padding: var(--spacing-sm) 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    .nl-badge {
+      display: inline-block;
+      background: var(--terracotta);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-full);
+      margin-right: var(--spacing-sm);
+    }
+    .nl-badge:last-child {
+      margin-right: 0;
+    }
+    .nl-notice {
+      background: var(--gold-light);
+      padding: var(--spacing-md);
+      border-radius: var(--radius-md);
+      margin-top: var(--spacing-md);
+      border-left: 4px solid var(--gold);
+    }
+    .nl-notice p {
+      margin: 0;
+      color: var(--ink);
+      font-size: 0.9375rem;
+    }
+    .nl-cta-box {
+      background: var(--sage);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      margin: var(--spacing-md) 0;
+      color: #fff;
+    }
+    .nl-cta-box h3 {
+      margin-top: 0;
+      color: #fff;
+    }
+    .nl-cta-box p {
+      color: #d4e8d6;
+    }
+    .nl-cta-box strong {
+      color: #fff;
+    }
+    .nl-cta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--spacing-sm);
+      margin-top: var(--spacing-md);
+    }
+    .nl-cta-card {
+      background: rgba(0,0,0,0.15);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-md);
+      text-align: center;
+    }
+    .nl-cta-card p {
+      margin: 0;
+      color: #fff;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    .nl-cta-card p small {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: #b0d4b3;
+      margin-top: 0.25rem;
+    }
+    @media (max-width: 640px) {
+      .newsletter-content {
+        padding: var(--spacing-md) 0;
+      }
+      .nl-cta-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <script src="../../js/components.js"></script>
+
+  <!-- Hero Newsletter -->
+  <section class="newsletter-hero">
+    <div class="container">
+      <h1>Newsletter KiCaféÇa</h1>
+      <p class="newsletter-meta"><span class="issue-number">Mai 2026 - N°4</span></p>
+      <p class="hero-baseline">Le café associatif vous raconte sa vie</p>
+    </div>
+  </section>
+
+  <!-- Newsletter Content -->
+  <main class="container newsletter-content">
+    <article class="nl-article">
+      <div class="nl-section">
+        <p>Salut à toutes et tous !</p>
+        <p>Les beaux jours sont là et le KiCaféÇa continue son chemin. Petit tour d'horizon de ce qui a bougé, du programme de mai, et de comment participer à la vie du lieu !</p>
+      </div>
+
+      <div class="nl-section">
+        <h2>Ce qui change en mai</h2>
+        <div class="nl-box">
+          <p>On <strong>adapte nos horaires d'ouverture</strong>. Comme tout repose sur du bénévolat, on concentre l'ouverture en mode "café libre" sur <strong>le mercredi</strong>. Le weekend, le lieu sera ouvert quand il y a des activités prévues (jeux, jeu de rôle, etc.). On espère élargir les créneaux au fur et à mesure, et pour ça toutes les bonnes volontés sont les bienvenues !</p>
+          <p>Bonne nouvelle côté local : <strong>le second volet roulant est réparé</strong>, on profite enfin de la lumière naturelle ! Et on va installer un <strong>panneau extérieur avec le planning du mois</strong>, pour que les passant·es puissent voir d'un coup d'œil ce qui se passe au café.</p>
+        </div>
+      </div>
+
+      <div class="nl-section">
+        <h2>Retour sur le mois d'avril</h2>
+        <div class="nl-highlights">
+          <p><span style="font-size:1.2em;">🎪</span> Du <strong>théâtre d'impro avec Blaise</strong>, qui a bien fait rire la salle !</p>
+          <p><span style="font-size:1.2em;">🎵</span> Le <strong>concert de Christelle Basse</strong> suivi d'une <strong>jam session #2</strong></p>
+          <p><span style="font-size:1.2em;">🎲</span> Les <strong>dimanches ludiques</strong> et l'ouverture le <strong>vendredi avec l'origami</strong></p>
+          <p><span style="font-size:1.2em;">🎮</span> Un premier atelier <strong>Jeu de Rôle</strong> avec Lutin</p>
+          <p><span style="font-size:1.2em;">📖</span> <strong>Arpentage</strong> du livre <em>Résister</em> de Salomé Saqué</p>
+        </div>
+      </div>
+
+      <div class="nl-section">
+        <h2>Au programme - Mai 2026</h2>
+        <p>On garde les classiques et on accueille de nouvelles activités ! Retrouvez le <a href="PJ/planning-mai-2026.html">planning complet en pièce jointe</a>.</p>
+        <p>Les p'tits nouveaux :</p>
+        <ul class="nl-items-list">
+          <li>
+            <span class="nl-badge">Nouveau</span>
+            <strong>Théâtre forum</strong> avec Morgane (mardis 5 et 26 mai, 19h30-21h)
+          </li>
+          <li>
+            <span class="nl-badge">Nouveau</span>
+            <strong>Modèle vivant</strong> avec Vera (samedis 2 et 30 mai, 9h-12h)
+          </li>
+          <li>
+            <span class="nl-badge">Nouveau</span>
+            <strong>Chant pour tous / Circle Song</strong> avec Jinja et Maud (mercredi 27 mai, 16h-18h)
+          </li>
+        </ul>
+
+        <div class="nl-box">
+          <h3>Les temps forts</h3>
+          <p><span style="font-size:1.2em;">🎵</span> <strong>Jam Session</strong> — Jeudi 21 mai, 19h-00h avec Laurie</p>
+          <p><span style="font-size:1.2em;">🎬</span> <strong>Projection / Débat</strong> — Mardi 19 mai, 19h30-21h30, Documentaire de Blast</p>
+          <p><span style="font-size:1.2em;">⭐</span> <strong>Jeudi 7 mai, 18h30</strong> : Conférence gesticulée <em>"Pourquoi t'es pas partie ?"</em> avec <strong>Maritchu</strong>. Un moment fort, à ne pas manquer.</p>
+        </div>
+
+        <div class="nl-box">
+          <h3>Arpentage</h3>
+          <p><span style="font-size:1.2em;">🏳️‍🌈</span> <strong>Lundi 1er juin</strong>, dans le cadre de la <strong>semaine des fiertés</strong> :</p>
+          <p><strong>Arpentage</strong> du livre <em>Les liens qui empêchent</em> de Sarah Schulman, animé par <strong>Vivi</strong>. Un temps de lecture collective et d'échange autour d'un texte fort sur les conflits, l'intimité et la communauté.</p>
+        </div>
+
+        <div class="nl-notice">
+          <p><span style="font-size:1.2em;">☀️</span> <strong>Et si on sortait ?</strong> On réfléchit à organiser un <strong>événement en extérieur</strong>, une journée conviviale au petit rocher avec musique, jam, pique-nique... Ça vous tenterait ? Faites-nous signe, on construit ça ensemble !</p>
+        </div>
+      </div>
+
+      <div class="nl-section">
+        <h2>Appel à coups de main</h2>
+        <p>Le KiCaféÇa tourne grâce à une poignée de bénévoles, et on aimerait vraiment élargir le cercle. En ce moment, on a particulièrement besoin de <strong>monde lors des soirées et pour l'organisation des événements</strong>. Mais que ce soit pour tenir une permanence, participer aux réflexions ou proposer une activité, chaque contribution compte !</p>
+
+        <div class="nl-cta-box">
+          <h3>Comment participer ?</h3>
+          <div class="nl-cta-grid">
+            <div class="nl-cta-card">
+              <p>💪 Permanences <small>Tenir le lieu pour qu'il vive</small></p>
+            </div>
+            <div class="nl-cta-card">
+              <p>💬 Idées &amp; activités <small>Proposer un atelier, un échange, un truc chouette</small></p>
+            </div>
+            <div class="nl-cta-card">
+              <p>🎉 Soirées &amp; orgas <small>Aider à monter les événements</small></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="nl-box">
+          <h3>On cherche aussi :</h3>
+          <p><strong>🎨 Espace enfants :</strong> on aménage un coin pour les marmots ! On cherche des <strong>jouets, kapla, puzzles, jeux de société, coussins, tapis de sol</strong> et une petite étagère ou un coffre. Merci de nous contacter avant d'apporter quoi que ce soit, pour qu'on puisse évaluer le besoin et l'état : on a un espace limité et on veut que tout soit en bon état et adapté.</p>
+        </div>
+      </div>
+    </article>
+
+    <div class="nl-notice">
+      <p><strong>💬 Une question pour vous :</strong> Est-ce qu'<strong>il vous manque quelque chose</strong> au KiCaféÇa ? Un créneau horaire, un type d'activité, un service ? Dites-le nous, on est à l'écoute. Venez nous en parler un mercredi !</p>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+  <script src="../../js/main.js"></script>
+</body>
+</html>
