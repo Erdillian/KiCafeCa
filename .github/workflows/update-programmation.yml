@@ -12,29 +12,35 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: "📥 1. Recuperation du code"
         uses: actions/checkout@v4
 
-      - name: Setup Python
+      - name: "🐍 2. Installation de Python"
         uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
-      - name: Lancer le script de mise a jour
+      - name: "🚀 3. Lancement de la mise a jour"
         env:
           OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
           OLLAMA_MODEL: ${{ secrets.OLLAMA_MODEL || 'kimi-k2.6:cloud' }}
           USE_OLLAMA: ${{ secrets.USE_OLLAMA || 'true' }}
-        run: python scripts/update_programmation.py
+        run: |
+          echo "::group::📝 Etapes de generation"
+          python scripts/update_programmation.py
+          echo "::endgroup::"
 
-      - name: Commit & push si changement
+      - name: "💾 4. Sauvegarde si changement"
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           if git diff --quiet programmation.html; then
-            echo "Aucun changement dans programmation.html"
+            echo "✅ Aucun changement detecte dans programmation.html"
+            echo "📅 Le calendrier est deja a jour."
             exit 0
           fi
+          echo "🆕 Changements detectes ! Sauvegarde en cours..."
           git add programmation.html
           git commit -m "Maj auto programmation.html depuis Google Doc"
           git push
+          echo "🎉 Mise a jour publiee avec succes !"

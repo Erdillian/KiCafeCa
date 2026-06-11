@@ -129,32 +129,23 @@ def call_ollama(user_content: str, num_predict: int = 150) -> str | None:
         method="POST"
     )
     try:
-        print(f"[OLLAMA] POST {url} — model={OLLAMA_MODEL} — content_len={len(user_content)} — timeout=600s")
+        print(f"⏳ Attente de la reponse Ollama (jusqu'a 10 min)...")
         with urllib.request.urlopen(req, timeout=600) as resp:
             raw = resp.read().decode("utf-8")
-            print(f"[OLLAMA] HTTP {resp.status} — réponse_len={len(raw)}")
-            # Sauvegarder le JSON brut pour inspection
-            json_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ollama_raw.json")
-            with open(json_path, "w", encoding="utf-8") as f:
-                f.write(raw)
-            print(f"[DEBUG] JSON brut sauvegardé dans : {json_path}")
-
             data = json.loads(raw)
             msg = data.get("message", {})
             response_text = ""
             if isinstance(msg, dict):
                 response_text = msg.get("content", "").strip()
-                # Modèles "thinking" comme kimi-k2.6 mettent le raisonnement dans thinking
                 if not response_text and "thinking" in msg:
                     response_text = msg["thinking"].strip()
-                    print("[OLLAMA] Modèle thinking détecté — utilisation du champ 'thinking'.")
             if not response_text:
-                print(f"[WARN] Réponse Ollama vide (clés trouvées: {list(data.keys())}).")
+                print("⚠️  L'IA a renvoye une reponse vide — passage en mode texte brut")
                 return None
-            print(f"[OLLAMA] Réponse tronquée : {response_text[:200]}...")
+            print("✅ Reponse Ollama recue")
             return response_text
     except Exception as e:
-        print(f"[WARN] Ollama indisponible ({type(e).__name__}: {e}). Fallback parser brut.")
+        print(f"⚠️  Ollama indisponible ({type(e).__name__}: {e}) — passage en mode texte brut")
         return None
 
 
@@ -266,19 +257,17 @@ def format_events_batch(raw_events: list[str]) -> list[str]:
         "Output:"
     )
 
-    # Sauvegarde INCONDITIONNELLE du prompt et de la réponse pour debug
+    # Sauvegarde silencieuse du prompt et de la réponse (fichiers ignores par git)
     script_dir = os.path.dirname(os.path.abspath(__file__))
     prompt_path = os.path.join(script_dir, "ollama_prompt.txt")
     response_path = os.path.join(script_dir, "ollama_response.txt")
     with open(prompt_path, "w", encoding="utf-8") as f:
         f.write(prompt)
-    print(f"[DEBUG] Prompt Ollama sauvegardé dans : {prompt_path}")
 
     result = call_ollama(prompt)
     if result is not None:
         with open(response_path, "w", encoding="utf-8") as f:
             f.write(result)
-        print(f"[DEBUG] Réponse Ollama sauvegardée ({len(result)} chars) dans : {response_path}")
 
         formatted = _parse_numbered_list(result, len(raw_events))
         if formatted:
@@ -292,12 +281,10 @@ def format_events_batch(raw_events: list[str]) -> list[str]:
             # Vérifier si le formatting a vraiment eu lieu
             has_html = any("<strong>" in c or "<em>" in c for c in cleaned)
             if not has_html:
-                print("[WARN] Ollama a répondu mais n'a pas appliqué de balises HTML. Fallback brut.")
+                print("⚠️  L'IA a repondu mais sans mise en forme HTML — texte brut conserve")
             return cleaned
         else:
-            print(f"[WARN] Batch malformé (count mismatch vs {len(raw_events)} attendus). Fallback brut.")
-    else:
-        print("[WARN] Ollama n'a retourné aucune réponse (timeout ou erreur réseau). Fallback brut.")
+            print(f"⚠️  Format de reponse incorrect ({len(formatted) if formatted else 'aucun'} vs {len(raw_events)} attendus) — texte brut conserve")
     return list(raw_events)
 
 
@@ -473,10 +460,12 @@ def generate_html(month_year, weeks):
                         seen.add(ev)
                         unique_events.append(ev)
         if unique_events:
-            print(f"[OLLAMA] Formatage batch de {len(unique_events)} événements uniques...")
+            print(f"🤖 Envoi a Ollama ({len(unique_events)} evenements uniques a formater)...")
             formatted_list = format_events_batch(unique_events)
             success_count = sum(1 for raw, fmt in zip(unique_events, formatted_list) if fmt != raw)
-            print(f"[OLLAMA] {success_count}/{len(unique_events)} événements formatés par Ollama.")
+            print(f"✨ {success_count}/{len(unique_events)} evenements mis en forme par l'IA")
+            if success_count == 0 and USE_OLLAMA:
+                print("⚠️  L'IA n'a pas pu formater — le texte brut sera utilise")
             for raw, fmt in zip(unique_events, formatted_list):
                 formatted_map[raw] = fmt
 
@@ -775,18 +764,18 @@ def generate_html(month_year, weeks):
 
 
 def main():
-    print("[DOWNLOAD] Telechargement du Google Doc...")
+    print("📡 Telechargement du Google Doc de programmation...")
     month_year, weeks = parse_google_doc()
-    print(f"[INFO] Mois detecte : {month_year}")
-    print(f"[INFO] Semaines trouvees : {len(weeks)}")
     total_events = sum(len(d["events"]) for w in weeks for d in w)
-    print(f"[INFO] Evenements trouves : {total_events}")
+    print(f"📅 Mois detecte : {month_year}")
+    print(f"📊 {len(weeks)} semaines trouvees, {total_events} evenements au total")
 
+    print("🎨 Generation du calendrier (desktop + mobile)...")
     html_content = generate_html(month_year, weeks)
     out_path = os.path.abspath(OUTPUT_FILE)
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(html_content)
-    print(f"[OK] Fichier genere : {out_path}")
+    print(f"✅ Fichier genere : {out_path}")
 
 
 if __name__ == "__main__":
