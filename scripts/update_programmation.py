@@ -14,6 +14,7 @@ Nécessite : Python 3.6+ (stdlib uniquement)
 """
 
 import urllib.request
+import json
 import re
 import html as html_module
 import os
@@ -24,6 +25,10 @@ import sys
 GOOGLE_DOC_ID = "1iXZjXpH8-j4PTD1x4FjOXIbGm1VlK3Dp1ajanU1_FRc"
 EXPORT_URL = f"https://docs.google.com/document/d/{GOOGLE_DOC_ID}/export?format=html"
 OUTPUT_FILE = os.path.join(os.path.dirname(__file__), "..", "programmation.html")
+
+OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://localhost:11434").rstrip("/")
+OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "llama3.1:8b")
+USE_OLLAMA = os.environ.get("USE_OLLAMA", "true").lower() in ("1", "true", "yes")
 
 WEEKDAYS = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
 WEEKDAY_SHORT = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
@@ -100,6 +105,103 @@ def classify_event(text: str) -> str:
     if any(k in t for k in SPECIAL_KEYWORDS):
         return "ev-special"
     return "ev-special"
+
+
+def call_ollama(prompt: str) -> str | None:
+    """Appelle l'API REST Ollama (/api/generate) et renvoie le texte genere."""
+    url = f"{OLLAMA_HOST}/api/generate"
+    payload = json.dumps({
+        "model": OLLAMA_MODEL,
+        "prompt": prompt,
+        "stream": False,
+        "options": {"temperature": 0.1, "num_predict": 150}
+    }).encode("utf-8")
+
+    req = urllib.request.Request(
+        url,
+        data=payload,
+        headers={"Content-Type": "application/json"},
+        method="POST"
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=120) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            return data.get("response", "").strip()
+    except Exception as e:
+        print(f"[WARN] Ollama indisponible ({e}). Fallback parser brut.")
+        return None
+
+
+def _clean_ollama_output(text: str) -> str:
+    """
+    Post-traitement aggressif : supprime les phrases introductives
+    et ne garde que la derniere ligne / bloc utile.
+    """
+    # Si plusieurs lignes, chercher la ligne qui contient <strong> ou une heure
+    lines = text.splitlines()
+    if len(lines) > 1:
+        # Chercher la derniere ligne qui resemble a du HTML formate (contient <strong> ou une heure)
+        for line in reversed(lines):
+            line = line.strip()
+            if not line:
+                continue
+            # Exclure les lignes qui sont clairement des intros
+            lower = line.lower()
+            if lower.startswith((
+                "voici", "voilà", "here is", "sure", "okay", "ok,", "ok.",
+                "maintenant", "formatage", "mise en forme", "html inline",
+                "l'événement", "l'evenement", "evenement :", "output:",
+                "resultat :", "réponse :", "réponse:", "reponse:",
+            )):
+                continue
+            if "<strong>" in line or TIME_RE.search(line) or "⭐" in line:
+                return line
+        # Fallback : derniere ligne non vide
+        for line in reversed(lines):
+            line = line.strip()
+            if line:
+                return line
+    return text.strip()
+
+
+def format_event_with_ollama(raw_text: str) -> str:
+    """Demande a Ollama de formater le texte brut en HTML joli."""
+    prompt = (
+        "Tu es un formateur HTML concis. Tu recois un evenement brut. "
+        "Tu dois UNIQUEMENT renvoyer le texte formate, sans aucune phrase d'introduction, "
+        "sans 'Voici', sans 'Voilà', sans 'Sure', sans 'Okay'. JUSTE le resultat brut.\n\n"
+        "REGLES :\n"
+        "- ⭐ au debut si evenement special (arpentage, soiree critique, docu blast, jam session, prepa pancartes, pride).\n"
+        "- Heure en premier (ex: 19h30, 10h-18h).\n"
+        "- Titre principal en <strong>...</strong>.\n"
+        "- Details / noms d'auteurs en <em>...</em>.\n"
+        "- Animateur entre parentheses <em>(Prenom)</em> a la fin.\n"
+        "- AUCUNE balise <span>, AUCUN markdown, AUCUN saut de ligne.\n"
+        "- UN seul ligne de texte, concis.\n\n"
+        "EXEMPLE 1:\n"
+        'Input: 19h30 Atelier /arpentage autour du livre Les liens qui empêchent de Sarah Schulman\n'
+        'Output: ⭐ 19h30 <strong>Arpentage</strong> <em>Les liens qui empêchent</em> <em>(Sarah Schulman)</em>\n\n'
+        "EXEMPLE 2:\n"
+        'Input: 8 Chorale/Chants polyphoniques 19h Cécile\n'
+        'Output: 19h <strong>Chorale Chants Polyphoniques</strong> <em>(Cécile)</em>\n\n'
+        "EXEMPLE 3:\n"
+        'Input: Académie libre et éclairé en résidence Béryl 10H/18H\n'
+        'Output: 10h-18h 🎓 <em>(Béryl)</em>\n\n'
+        "Format cet evenement :\n"
+        f"{raw_text}\n\n"
+        "Output:"
+    )
+
+    result = call_ollama(prompt)
+    if result:
+        result = _clean_ollama_output(result)
+        # Nettoie au cas ou le modele renvoie du markdown ou des balises span
+        result = re.sub(r"<span[^>]*>", "", result)
+        result = result.replace("</span>", "")
+        result = result.strip()
+        if result:
+            return result
+    return raw_text
 
 
 def split_cell_events(lines):
@@ -271,7 +373,7 @@ def generate_html(month_year, weeks):
             if wd in day_map:
                 d = day_map[wd]
                 ev_html = "\n".join(
-                    f'                <span class="event {classify_event(ev)}">{ev}</span>'
+                    f'                <span class="event {classify_event(ev)}">{format_event_with_ollama(ev) if USE_OLLAMA else ev}</span>'
                     for ev in d["events"]
                 )
                 cells.append(
@@ -310,7 +412,7 @@ def generate_html(month_year, weeks):
             if not d["events"]:
                 continue
             ev_html = "\n".join(
-                f'              <span class="event {classify_event(ev)}">{ev}</span>'
+                f'              <span class="event {classify_event(ev)}">{format_event_with_ollama(ev) if USE_OLLAMA else ev}</span>'
                 for ev in d["events"]
             )
             month_name = month_year.split()[0]  # ex: "Juin"
