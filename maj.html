@@ -141,6 +141,36 @@
       text-decoration: underline;
       font-weight: 600;
     }
+    .progress-container {
+      margin-top: 20px;
+      padding: 16px;
+      background: #F8F6F3;
+      border-radius: 12px;
+      border: 1px solid var(--sand);
+    }
+    .progress-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      font-size: 0.9rem;
+      color: var(--espresso-light);
+    }
+    .progress-step.done {
+      color: var(--espresso);
+    }
+    .progress-step.done .progress-icon {
+      color: var(--mint);
+    }
+    .progress-step.error .progress-icon {
+      color: var(--terracotta);
+    }
+    .progress-icon {
+      font-size: 1.1rem;
+      width: 24px;
+      text-align: center;
+      flex-shrink: 0;
+    }
   </style>
 </head>
 <body>
@@ -189,6 +219,17 @@
         <div class="status-box info" id="status-info"></div>
         <div class="status-box success" id="status-success"></div>
         <div class="status-box error" id="status-error"></div>
+
+        <div class="progress-container" id="progress-container" style="display:none;">
+          <div class="progress-step" id="progress-wf">
+            <span class="progress-icon">⏳</span>
+            <span class="progress-label">Workflow en cours...</span>
+          </div>
+          <div class="progress-step" id="progress-deploy">
+            <span class="progress-icon">⏳</span>
+            <span class="progress-label">Deploiement en attente...</span>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -229,6 +270,78 @@
           : '🚀 Mettre a jour la programmation';
       }
 
+      function setProgress(elId, icon, label, cls) {
+        var el = document.getElementById(elId);
+        if (!el) return;
+        el.querySelector('.progress-icon').textContent = icon;
+        el.querySelector('.progress-label').textContent = label;
+        el.className = 'progress-step ' + (cls || '');
+      }
+
+      function showProgress(show) {
+        document.getElementById('progress-container').style.display = show ? 'block' : 'none';
+      }
+
+      function pollRun(token, runId) {
+        var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/actions/runs/' + runId;
+        var interval = setInterval(function() {
+          fetch(url, {
+            headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' }
+          })
+          .then(function(r) { return r.json(); })
+          .then(function(run) {
+            if (run.status === 'completed') {
+              clearInterval(interval);
+              if (run.conclusion === 'success') {
+                setProgress('progress-wf', '✅', 'Workflow termine', 'done');
+                pollDeploy(token);
+              } else {
+                setProgress('progress-wf', '❌', 'Workflow echoue (' + run.conclusion + ')', 'error');
+                setLoading(false);
+              }
+              return;
+            }
+            setProgress('progress-wf', '⏳', 'Workflow en cours... (' + run.status + ')', '');
+          })
+          .catch(function() {
+            // Silencieux en cas d'erreur reseau
+          });
+        }, 3000);
+      }
+
+      function pollDeploy(token) {
+        setProgress('progress-deploy', '⏳', 'Deploiement en cours...', '');
+        var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/pages/deployments?per_page=1';
+        var interval = setInterval(function() {
+          fetch(url, {
+            headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' }
+          })
+          .then(function(r) { return r.json(); })
+          .then(function(deploys) {
+            if (!deploys || !deploys.length) return;
+            var d = deploys[0];
+            if (d.status === 'success') {
+              clearInterval(interval);
+              setProgress('progress-deploy', '✅', 'Site a jour !', 'done');
+              setLoading(false);
+              setStatus('success',
+                '🎉 Calendrier mis a jour et publie !<br>' +
+                '<a href="programmation.html">Voir le calendrier →</a>'
+              );
+              return;
+            }
+            if (d.status === 'error' || d.status === 'failure') {
+              clearInterval(interval);
+              setProgress('progress-deploy', '❌', 'Deploiement en erreur', 'error');
+              setLoading(false);
+              return;
+            }
+            setProgress('progress-deploy', '⏳', 'Deploiement en cours... (' + d.status + ')', '');
+          })
+          .catch(function() {});
+        }, 4000);
+      }
+
       window.lancerMaj = function() {
         var token = tokenInput.value.trim();
         if (!token) {
@@ -236,7 +349,6 @@
           return;
         }
 
-        // Sauvegarder ou effacer
         if (rememberCb.checked) {
           localStorage.setItem('kicafeca_github_token', token);
         } else {
@@ -245,8 +357,11 @@
 
         setStatus('info', '🔍 Lancement de la mise a jour...');
         setLoading(true);
+        showProgress(true);
+        setProgress('progress-wf', '⏳', 'Demarrage...', '');
+        setProgress('progress-deploy', '⏳', 'En attente...', '');
 
-        // 1. Lister les workflows pour trouver l'ID
+        var wfId;
         fetch('https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/actions/workflows', {
           headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' }
         })
@@ -257,10 +372,9 @@
         .then(function(data) {
           var wf = data.workflows.find(function(w) { return w.path === WORKFLOW_PATH; });
           if (!wf) throw new Error('Workflow introuvable : ' + WORKFLOW_PATH);
-          setStatus('info', '🚀 Demarrage en cours...');
+          wfId = wf.id;
 
-          // 2. Declencher le workflow_dispatch
-          return fetch('https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/actions/workflows/' + wf.id + '/dispatches', {
+          return fetch('https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/actions/workflows/' + wfId + '/dispatches', {
             method: 'POST',
             headers: {
               'Authorization': 'Bearer ' + token,
@@ -275,15 +389,29 @@
             if (r.status === 422) throw new Error('Le workflow est deja en cours d\'execution.');
             throw new Error('Erreur GitHub ' + r.status + ' lors du lancement.');
           }
-          setLoading(false);
-          setStatus('success',
-            '✅ Mise a jour lancee avec succes !<br>' +
-            '⏳ Le site se rafraichira dans 1 a 3 minutes.<br>' +
-            '<a href="https://github.com/' + REPO_OWNER + '/' + REPO_NAME + '/actions" target="_blank" rel="noopener">Suivre la progression sur GitHub Actions →</a>'
-          );
+
+          // Workflow lance, trouver le run associe
+          setStatus('info', '🚀 Demarrage en cours...');
+          setProgress('progress-wf', '🔍', 'Recherche du run...', '');
+
+          return new Promise(function(resolve) {
+            setTimeout(resolve, 2000);
+          });
+        })
+        .then(function() {
+          return fetch('https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/actions/runs?workflow_id=' + wfId + '&per_page=5', {
+            headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' }
+          });
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          var run = data.workflow_runs[0];
+          if (!run) throw new Error('Run introuvable apres le lancement.');
+          pollRun(token, run.id);
         })
         .catch(function(err) {
           setLoading(false);
+          showProgress(false);
           setStatus('error', '❌ ' + err.message);
         });
       };
