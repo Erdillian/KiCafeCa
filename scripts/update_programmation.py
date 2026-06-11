@@ -186,7 +186,7 @@ def _parse_numbered_list(text: str, expected_count: int) -> list[str] | None:
 
 
 def _normalize_time(text: str) -> str:
-    """Normalise les formats d'heure : slash → tiret, H → h, pas d'espaces."""
+    """Normalise les formats d'heure : slash → tiret, H → h, pas d'espaces internes."""
     # Plage horaire : 17h/21h, 18 H 30 - 19 h 30 → 17h-21h, 18h30-19h30
     def _repl_range(m):
         h1, m1, h2, m2 = m.group(1), m.group(2), m.group(3), m.group(4)
@@ -200,12 +200,23 @@ def _normalize_time(text: str) -> str:
         text,
     )
 
-    # Heure simple : 19 H 30, 19h00 → 19h30, 19h00
-    def _repl_single(m):
-        h, m = m.group(1), m.group(2)
-        return f"{h}h{m}" if m else f"{h}h"
+    # Heure AVEC minutes : 19h30, 19 H 30, 19h00 → 19h30
+    # Groupe 2 a exactement 2 chiffres → pas de risque de manger un espace vide
+    text = re.sub(
+        r'(\d{1,2})\s*[hH]\s*(\d{2})(?![\d\-/])',
+        lambda m: f"{m.group(1)}h{m.group(2)}",
+        text,
+    )
 
-    text = re.sub(r'(\d{1,2})\s*[hH]\s*(\d{0,2})(?![-/])', _repl_single, text)
+    # Heure SANS minutes : 19h, 19 H → 19h
+    # (?!<strong>) empêche de matcher dans les balises HTML
+    # (?!<) évite de matcher avant un tag
+    # (?![\d\-/]) évite les plages déjà traitées
+    text = re.sub(
+        r'(\d{1,2})\s*[hH](?![\d\-/]|<)',
+        lambda m: f"{m.group(1)}h",
+        text,
+    )
     return text
 
 

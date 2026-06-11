@@ -33,3 +33,9 @@ screenshot-*.png
 screenshots/
 plan.txt
 problemes.txt
+API.txt
+
+# Fichiers de debug Ollama (générés à chaque exécution)
+scripts/ollama_prompt.txt
+scripts/ollama_response.txt
+scripts/ollama_raw.json
