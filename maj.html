@@ -141,46 +141,6 @@
       text-decoration: underline;
       font-weight: 600;
     }
-    .steps-list {
-      list-style: none;
-      padding: 0;
-      margin: 16px 0 0;
-    }
-    .steps-list li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 0;
-      font-size: 0.9rem;
-      color: var(--espresso-light);
-    }
-    .steps-list li.done {
-      color: var(--espresso);
-    }
-    .step-dot {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--sand);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.7rem;
-      flex-shrink: 0;
-    }
-    .steps-list li.done .step-dot {
-      background: var(--mint);
-      color: #fff;
-    }
-    .step-sep {
-      width: 2px;
-      height: 16px;
-      background: var(--sand);
-      margin-left: 9px;
-    }
-    .steps-list li.done + li .step-sep {
-      background: var(--mint);
-    }
   </style>
 </head>
 <body>
@@ -199,26 +159,16 @@
 
       <div class="maj-card">
         <h2>Que fait ce bouton ?</h2>
-        <p>Le calendrier mensuel est genere automatiquement a partir du <strong>Google Doc de programmation</strong>. Ce bouton lance la mise a jour : telechargement du doc, formatage par l'IA, et publication du nouveau calendrier.</p>
-        <ul class="steps-list">
-          <li id="step-1"><span class="step-dot">1</span>Telechargement du Google Doc</li>
-          <li id="step-2"><span class="step-dot">2</span>Formatage des evenements par l'IA</li>
-          <li id="step-3"><span class="step-dot">3</span>Generation du fichier HTML</li>
-          <li id="step-4"><span class="step-dot">4</span>Publication sur le site (1 a 3 min)</li>
-        </ul>
+        <p>Met a jour le calendrier avec les infos du <strong>Google Doc</strong>. L'IA fait quelques retouches de formattage.</p>
       </div>
 
       <div class="maj-card">
         <h2>Configuration</h2>
-        <p>Pour lancer la mise a jour, vous avez besoin d'un <strong>token d'acces personnel GitHub</strong> avec les droits sur ce depot.</p>
 
         <div class="form-group">
           <label for="github-token">Token GitHub</label>
           <input type="password" id="github-token" placeholder="ghp_xxxxxxxxxxxx">
-          <p class="form-hint">
-            <a href="https://github.com/settings/tokens/new?scopes=repo,workflow&description=KiCafeCa%20MAJ" target="_blank" rel="noopener">Creer un token</a>
-            (cochez les cases <em>repo</em> et <em>workflow</em>)
-          </p>
+          <p class="form-hint">Entrez le token que Kérim vous a tres gentiment donné.</p>
         </div>
 
         <div class="form-group">
@@ -270,21 +220,6 @@
         });
       }
 
-      function setStep(n, done) {
-        var el = document.getElementById('step-' + n);
-        if (!el) return;
-        if (done) {
-          el.classList.add('done');
-          el.querySelector('.step-dot').textContent = '✓';
-        } else {
-          el.classList.remove('done');
-          el.querySelector('.step-dot').textContent = n;
-        }
-      }
-
-      function resetSteps() {
-        for (var i = 1; i <= 4; i++) setStep(i, false);
-      }
 
       function setLoading(loading) {
         var btn = document.getElementById('btn-lancer');
@@ -308,8 +243,7 @@
           localStorage.removeItem('kicafeca_github_token');
         }
 
-        resetSteps();
-        setStatus('info', '🔍 Recherche du workflow sur GitHub...');
+        setStatus('info', '🔍 Lancement de la mise a jour...');
         setLoading(true);
 
         // 1. Lister les workflows pour trouver l'ID
@@ -323,8 +257,7 @@
         .then(function(data) {
           var wf = data.workflows.find(function(w) { return w.path === WORKFLOW_PATH; });
           if (!wf) throw new Error('Workflow introuvable : ' + WORKFLOW_PATH);
-          setStatus('info', '🚀 Lancement de la mise a jour...');
-          setStep(1, true);
+          setStatus('info', '🚀 Demarrage en cours...');
 
           // 2. Declencher le workflow_dispatch
           return fetch('https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/actions/workflows/' + wf.id + '/dispatches', {
@@ -342,9 +275,6 @@
             if (r.status === 422) throw new Error('Le workflow est deja en cours d\'execution.');
             throw new Error('Erreur GitHub ' + r.status + ' lors du lancement.');
           }
-          setStep(2, true);
-          setStep(3, true);
-          setStep(4, true);
           setLoading(false);
           setStatus('success',
             '✅ Mise a jour lancee avec succes !<br>' +
