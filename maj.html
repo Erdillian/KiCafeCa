@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise a jour — KiCaféÇa</title>
+  <meta name="description" content="Page de mise a jour automatique du calendrier KiCaféÇa.">
+
+  <link rel="icon" href="images/favicon.ico">
+  <link rel="apple-touch-icon" href="images/Logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .maj-container {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .maj-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      margin-bottom: 24px;
+    }
+    .maj-card h2 {
+      font-size: 1.25rem;
+      margin-bottom: 12px;
+      color: var(--espresso);
+    }
+    .maj-card p {
+      font-size: 0.95rem;
+      color: var(--espresso-light);
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+      color: var(--espresso);
+    }
+    .form-group input[type="password"],
+    .form-group input[type="text"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid var(--sand);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-family: 'DM Sans', sans-serif;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--terracotta);
+    }
+    .form-hint {
+      font-size: 0.82rem;
+      color: var(--espresso-light);
+      margin-top: 6px;
+    }
+    .form-hint a {
+      color: var(--terracotta);
+      text-decoration: underline;
+    }
+    .btn-maj {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--terracotta);
+      color: #fff;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-maj:hover {
+      background: #A05030;
+    }
+    .btn-maj:active {
+      transform: scale(0.98);
+    }
+    .btn-maj:disabled {
+      background: var(--sand);
+      color: var(--espresso-light);
+      cursor: not-allowed;
+    }
+    .btn-maj .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      display: none;
+    }
+    .btn-maj:disabled .spinner {
+      display: inline-block;
+      border-top-color: var(--espresso-light);
+    }
+    .btn-maj:disabled .btn-text {
+      opacity: 0.8;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .status-box {
+      margin-top: 20px;
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      display: none;
+    }
+    .status-box.show {
+      display: block;
+    }
+    .status-box.info {
+      background: #E8F4FD;
+      color: #1A6B8C;
+    }
+    .status-box.success {
+      background: #E8F5E9;
+      color: #2E7D32;
+    }
+    .status-box.error {
+      background: #FFF5F0;
+      color: #B55A40;
+    }
+    .status-box a {
+      color: inherit;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+    .steps-list {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0 0;
+    }
+    .steps-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      font-size: 0.9rem;
+      color: var(--espresso-light);
+    }
+    .steps-list li.done {
+      color: var(--espresso);
+    }
+    .step-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--sand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      flex-shrink: 0;
+    }
+    .steps-list li.done .step-dot {
+      background: var(--mint);
+      color: #fff;
+    }
+    .step-sep {
+      width: 2px;
+      height: 16px;
+      background: var(--sand);
+      margin-left: 9px;
+    }
+    .steps-list li.done + li .step-sep {
+      background: var(--mint);
+    }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <script src="js/components.js"></script>
+
+  <section class="programmation-hero" style="padding-bottom: 24px;">
+    <div class="container">
+      <h1 class="section-title">Mise a jour du calendrier</h1>
+      <p class="section-subtitle">Lancer la generation automatique depuis le Google Doc</p>
+    </div>
+  </section>
+
+  <section class="programmation-calendar" style="padding-top: 0;">
+    <div class="container maj-container">
+
+      <div class="maj-card">
+        <h2>Que fait ce bouton ?</h2>
+        <p>Le calendrier mensuel est genere automatiquement a partir du <strong>Google Doc de programmation</strong>. Ce bouton lance la mise a jour : telechargement du doc, formatage par l'IA, et publication du nouveau calendrier.</p>
+        <ul class="steps-list">
+          <li id="step-1"><span class="step-dot">1</span>Telechargement du Google Doc</li>
+          <li id="step-2"><span class="step-dot">2</span>Formatage des evenements par l'IA</li>
+          <li id="step-3"><span class="step-dot">3</span>Generation du fichier HTML</li>
+          <li id="step-4"><span class="step-dot">4</span>Publication sur le site (1 a 3 min)</li>
+        </ul>
+      </div>
+
+      <div class="maj-card">
+        <h2>Configuration</h2>
+        <p>Pour lancer la mise a jour, vous avez besoin d'un <strong>token d'acces personnel GitHub</strong> avec les droits sur ce depot.</p>
+
+        <div class="form-group">
+          <label for="github-token">Token GitHub</label>
+          <input type="password" id="github-token" placeholder="ghp_xxxxxxxxxxxx">
+          <p class="form-hint">
+            <a href="https://github.com/settings/tokens/new?scopes=repo,workflow&description=KiCafeCa%20MAJ" target="_blank" rel="noopener">Creer un token</a>
+            (cochez les cases <em>repo</em> et <em>workflow</em>)
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="remember-token" checked>
+            Se souvenir du token dans ce navigateur
+          </label>
+        </div>
+      </div>
+
+      <div class="maj-card">
+        <h2>Action</h2>
+        <button class="btn-maj" id="btn-lancer" onclick="lancerMaj()">
+          <span class="spinner"></span>
+          <span class="btn-text">🚀 Mettre a jour la programmation</span>
+        </button>
+
+        <div class="status-box info" id="status-info"></div>
+        <div class="status-box success" id="status-success"></div>
+        <div class="status-box error" id="status-error"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="js/main.js"></script>
+  <script>
+    (function() {
+      var REPO_OWNER = 'Erdillian';
+      var REPO_NAME = 'KiCafeCa';
+      var WORKFLOW_PATH = '.github/workflows/update-programmation.yml';
+      var tokenInput = document.getElementById('github-token');
+      var rememberCb = document.getElementById('remember-token');
+
+      // Restaurer token du localStorage
+      var saved = localStorage.getItem('kicafeca_github_token');
+      if (saved) tokenInput.value = saved;
+
+      function setStatus(type, html) {
+        ['info', 'success', 'error'].forEach(function(t) {
+          var el = document.getElementById('status-' + t);
+          if (t === type) {
+            el.innerHTML = html;
+            el.classList.add('show');
+          } else {
+            el.classList.remove('show');
+          }
+        });
+      }
+
+      function setStep(n, done) {
+        var el = document.getElementById('step-' + n);
+        if (!el) return;
+        if (done) {
+          el.classList.add('done');
+          el.querySelector('.step-dot').textContent = '✓';
+        } else {
+          el.classList.remove('done');
+          el.querySelector('.step-dot').textContent = n;
+        }
+      }
+
+      function resetSteps() {
+        for (var i = 1; i <= 4; i++) setStep(i, false);
+      }
+
+      function setLoading(loading) {
+        var btn = document.getElementById('btn-lancer');
+        btn.disabled = loading;
+        btn.querySelector('.btn-text').textContent = loading
+          ? 'Mise a jour en cours...'
+          : '🚀 Mettre a jour la programmation';
+      }
+
+      window.lancerMaj = function() {
+        var token = tokenInput.value.trim();
+        if (!token) {
+          setStatus('error', 'Veuillez saisir votre token GitHub.');
+          return;
+        }
+
+        // Sauvegarder ou effacer
+        if (rememberCb.checked) {
+          localStorage.setItem('kicafeca_github_token', token);
+        } else {
+          localStorage.removeItem('kicafeca_github_token');
+        }
+
+        resetSteps();
+        setStatus('info', '🔍 Recherche du workflow sur GitHub...');
+        setLoading(true);
+
+        // 1. Lister les workflows pour trouver l'ID
+        fetch('https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/actions/workflows', {
+          headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' }
+        })
+        .then(function(r) {
+          if (!r.ok) throw new Error('Token invalide ou depot inaccessible (' + r.status + ')');
+          return r.json();
+        })
+        .then(function(data) {
+          var wf = data.workflows.find(function(w) { return w.path === WORKFLOW_PATH; });
+          if (!wf) throw new Error('Workflow introuvable : ' + WORKFLOW_PATH);
+          setStatus('info', '🚀 Lancement de la mise a jour...');
+          setStep(1, true);
+
+          // 2. Declencher le workflow_dispatch
+          return fetch('https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/actions/workflows/' + wf.id + '/dispatches', {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer ' + token,
+              'Accept': 'application/vnd.github.v3+json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ref: 'main' })
+          });
+        })
+        .then(function(r) {
+          if (!r.ok) {
+            if (r.status === 422) throw new Error('Le workflow est deja en cours d\'execution.');
+            throw new Error('Erreur GitHub ' + r.status + ' lors du lancement.');
+          }
+          setStep(2, true);
+          setStep(3, true);
+          setStep(4, true);
+          setLoading(false);
+          setStatus('success',
+            '✅ Mise a jour lancee avec succes !<br>' +
+            '⏳ Le site se rafraichira dans 1 a 3 minutes.<br>' +
+            '<a href="https://github.com/' + REPO_OWNER + '/' + REPO_NAME + '/actions" target="_blank" rel="noopener">Suivre la progression sur GitHub Actions →</a>'
+          );
+        })
+        .catch(function(err) {
+          setLoading(false);
+          setStatus('error', '❌ ' + err.message);
+        });
+      };
+    })();
+  </script>
+</body>
+</html>
