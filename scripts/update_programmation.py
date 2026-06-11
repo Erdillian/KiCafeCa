@@ -26,8 +26,8 @@ GOOGLE_DOC_ID = "1iXZjXpH8-j4PTD1x4FjOXIbGm1VlK3Dp1ajanU1_FRc"
 EXPORT_URL = f"https://docs.google.com/document/d/{GOOGLE_DOC_ID}/export?format=html"
 OUTPUT_FILE = os.path.join(os.path.dirname(__file__), "..", "programmation.html")
 
-OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "https://ollama.com").rstrip("/")
-OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "llama3.1:8b")
+OLLAMA_HOST = "https://ollama.com"
+OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "kimi-k2.6:cloud")
 OLLAMA_API_KEY = os.environ.get("OLLAMA_API_KEY", "")
 USE_OLLAMA = os.environ.get("USE_OLLAMA", "true").lower() in ("1", "true", "yes")
 
@@ -108,14 +108,14 @@ def classify_event(text: str) -> str:
     return "ev-special"
 
 
-def call_ollama(prompt: str) -> str | None:
-    """Appelle l'API REST Ollama (/api/generate) et renvoie le texte genere."""
-    url = f"{OLLAMA_HOST}/api/generate"
+def call_ollama(user_content: str, num_predict: int = 150) -> str | None:
+    """Appelle l'API REST Ollama (/api/chat) et renvoie le texte genere."""
+    url = f"{OLLAMA_HOST}/api/chat"
     payload = json.dumps({
         "model": OLLAMA_MODEL,
-        "prompt": prompt,
+        "messages": [{"role": "user", "content": user_content}],
         "stream": False,
-        "options": {"temperature": 0.1, "num_predict": 150}
+        "options": {"temperature": 0.1}
     }).encode("utf-8")
 
     headers = {"Content-Type": "application/json"}
@@ -129,84 +129,158 @@ def call_ollama(prompt: str) -> str | None:
         method="POST"
     )
     try:
-        with urllib.request.urlopen(req, timeout=120) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-            return data.get("response", "").strip()
+        print(f"[OLLAMA] POST {url} — model={OLLAMA_MODEL} — content_len={len(user_content)} — timeout=600s")
+        with urllib.request.urlopen(req, timeout=600) as resp:
+            raw = resp.read().decode("utf-8")
+            print(f"[OLLAMA] HTTP {resp.status} — réponse_len={len(raw)}")
+            # Sauvegarder le JSON brut pour inspection
+            json_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ollama_raw.json")
+            with open(json_path, "w", encoding="utf-8") as f:
+                f.write(raw)
+            print(f"[DEBUG] JSON brut sauvegardé dans : {json_path}")
+
+            data = json.loads(raw)
+            msg = data.get("message", {})
+            response_text = ""
+            if isinstance(msg, dict):
+                response_text = msg.get("content", "").strip()
+                # Modèles "thinking" comme kimi-k2.6 mettent le raisonnement dans thinking
+                if not response_text and "thinking" in msg:
+                    response_text = msg["thinking"].strip()
+                    print("[OLLAMA] Modèle thinking détecté — utilisation du champ 'thinking'.")
+            if not response_text:
+                print(f"[WARN] Réponse Ollama vide (clés trouvées: {list(data.keys())}).")
+                return None
+            print(f"[OLLAMA] Réponse tronquée : {response_text[:200]}...")
+            return response_text
     except Exception as e:
-        print(f"[WARN] Ollama indisponible ({e}). Fallback parser brut.")
+        print(f"[WARN] Ollama indisponible ({type(e).__name__}: {e}). Fallback parser brut.")
         return None
 
 
-def _clean_ollama_output(text: str) -> str:
+def _parse_numbered_list(text: str, expected_count: int) -> list[str] | None:
     """
-    Post-traitement aggressif : supprime les phrases introductives
-    et ne garde que la derniere ligne / bloc utile.
+    Extrait la dernière liste numérotée complète du texte.
+    Cherche une séquence de expected_count lignes consécutives numérotées 1..N.
+    Renvoie None si incomplet.
     """
-    # Si plusieurs lignes, chercher la ligne qui contient <strong> ou une heure
-    lines = text.splitlines()
-    if len(lines) > 1:
-        # Chercher la derniere ligne qui resemble a du HTML formate (contient <strong> ou une heure)
-        for line in reversed(lines):
-            line = line.strip()
-            if not line:
-                continue
-            # Exclure les lignes qui sont clairement des intros
-            lower = line.lower()
-            if lower.startswith((
-                "voici", "voilà", "here is", "sure", "okay", "ok,", "ok.",
-                "maintenant", "formatage", "mise en forme", "html inline",
-                "l'événement", "l'evenement", "evenement :", "output:",
-                "resultat :", "réponse :", "réponse:", "reponse:",
-            )):
-                continue
-            if "<strong>" in line or TIME_RE.search(line) or "⭐" in line:
-                return line
-        # Fallback : derniere ligne non vide
-        for line in reversed(lines):
-            line = line.strip()
-            if line:
-                return line
-    return text.strip()
+    lines = text.strip().splitlines()
+    # Chercher la dernière occurrence d'une liste de expected_count éléments
+    # en parcourant les indices possibles de fin
+    for start in range(len(lines) - expected_count, -1, -1):
+        candidate = []
+        valid = True
+        for i in range(expected_count):
+            if start + i >= len(lines):
+                valid = False
+                break
+            line = lines[start + i].strip()
+            m = re.match(rf"^{i + 1}[.)]\s+(.*)$", line)
+            if not m:
+                valid = False
+                break
+            candidate.append(m.group(1).strip())
+        if valid:
+            return candidate
+    return None
 
 
-def format_event_with_ollama(raw_text: str) -> str:
-    """Demande a Ollama de formater le texte brut en HTML joli."""
+def _normalize_time(text: str) -> str:
+    """Normalise les formats d'heure : slash → tiret, H → h, pas d'espaces."""
+    # Plage horaire : 17h/21h, 18 H 30 - 19 h 30 → 17h-21h, 18h30-19h30
+    def _repl_range(m):
+        h1, m1, h2, m2 = m.group(1), m.group(2), m.group(3), m.group(4)
+        left = f"{h1}h{m1}" if m1 else f"{h1}h"
+        right = f"{h2}h{m2}" if m2 else f"{h2}h"
+        return f"{left}-{right}"
+
+    text = re.sub(
+        r'(\d{1,2})\s*[hH]\s*(\d{0,2})\s*[-/]\s*(\d{1,2})\s*[hH]\s*(\d{0,2})',
+        _repl_range,
+        text,
+    )
+
+    # Heure simple : 19 H 30, 19h00 → 19h30, 19h00
+    def _repl_single(m):
+        h, m = m.group(1), m.group(2)
+        return f"{h}h{m}" if m else f"{h}h"
+
+    text = re.sub(r'(\d{1,2})\s*[hH]\s*(\d{0,2})(?![-/])', _repl_single, text)
+    return text
+
+
+def format_events_batch(raw_events: list[str]) -> list[str]:
+    """
+    Appelle Ollama UNE SEULE FOIS pour formater tous les événements.
+    Renvoie une liste de strings formatées dans le même ordre que raw_events.
+    En cas d'échec, renvoie raw_events inchangée.
+    """
+    if not raw_events:
+        return []
+
+    indexed = "\n".join(f"{i + 1}. {ev}" for i, ev in enumerate(raw_events))
+
     prompt = (
-        "Tu es un formateur HTML concis. Tu recois un evenement brut. "
-        "Tu dois UNIQUEMENT renvoyer le texte formate, sans aucune phrase d'introduction, "
-        "sans 'Voici', sans 'Voilà', sans 'Sure', sans 'Okay'. JUSTE le resultat brut.\n\n"
-        "REGLES :\n"
-        "- ⭐ au debut si evenement special (arpentage, soiree critique, docu blast, jam session, prepa pancartes, pride).\n"
-        "- Heure en premier (ex: 19h30, 10h-18h).\n"
+        "Tu es un formateur HTML concis. Tu reçois une liste numérotée d'événements bruts. "
+        "Tu dois renvoyer UNIQUEMENT la liste numérotée formatée, ligne par ligne, "
+        "dans le MÊME ordre et le MÊME nombre que les événements d'entrée. "
+        "AUCUNE phrase d'introduction. AUCUN texte hors de la liste. "
+        "Ne réfléchis pas étape par étape, réponds directement.\n\n"
+        "RÈGLES pour chaque ligne :\n"
+        "- ⭐ au début si événement spécial (arpentage, soirée critique, docu blast, jam session, prépa pancartes, pride).\n"
+        "- Heure en premier, format strict : 19h, 19h30, 10h-18h.\n"
+        "  → Plage horaire : tiret - (pas de slash /). Pas d'espace autour du tiret.\n"
+        "  → h en minuscule, pas d'espace entre le chiffre et le h.\n"
         "- Titre principal en <strong>...</strong>.\n"
-        "- Details / noms d'auteurs en <em>...</em>.\n"
-        "- Animateur entre parentheses <em>(Prenom)</em> a la fin.\n"
-        "- AUCUNE balise <span>, AUCUN markdown, AUCUN saut de ligne.\n"
-        "- UN seul ligne de texte, concis.\n\n"
-        "EXEMPLE 1:\n"
-        'Input: 19h30 Atelier /arpentage autour du livre Les liens qui empêchent de Sarah Schulman\n'
-        'Output: ⭐ 19h30 <strong>Arpentage</strong> <em>Les liens qui empêchent</em> <em>(Sarah Schulman)</em>\n\n'
-        "EXEMPLE 2:\n"
-        'Input: 8 Chorale/Chants polyphoniques 19h Cécile\n'
-        'Output: 19h <strong>Chorale Chants Polyphoniques</strong> <em>(Cécile)</em>\n\n'
-        "EXEMPLE 3:\n"
-        'Input: Académie libre et éclairé en résidence Béryl 10H/18H\n'
-        'Output: 10h-18h 🎓 <em>(Béryl)</em>\n\n'
-        "Format cet evenement :\n"
-        f"{raw_text}\n\n"
+        "- Détails / noms d'auteurs en <em>...</em>.\n"
+        "- Animateur entre parenthèses <em>(Prénom)</em> à la fin.\n"
+        "- AUCUNE balise <span>, AUCUN markdown, AUCUN saut de ligne dans un événement.\n"
+        "- Un seul ligne de texte par événement, concis.\n\n"
+        "EXEMPLE :\n"
+        "Input:\n"
+        "1. 19h30 Atelier /arpentage autour du livre Les liens qui empêchent de Sarah Schulman\n"
+        "2. 8 Chorale/Chants polyphoniques 19h Cécile\n\n"
+        "Output:\n"
+        "1. ⭐ 19h30 <strong>Arpentage</strong> <em>Les liens qui empêchent</em> <em>(Sarah Schulman)</em>\n"
+        "2. 19h <strong>Chorale Chants Polyphoniques</strong> <em>(Cécile)</em>\n\n"
+        "Format ces événements :\n"
+        f"{indexed}\n\n"
         "Output:"
     )
 
+    # Sauvegarde INCONDITIONNELLE du prompt et de la réponse pour debug
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    prompt_path = os.path.join(script_dir, "ollama_prompt.txt")
+    response_path = os.path.join(script_dir, "ollama_response.txt")
+    with open(prompt_path, "w", encoding="utf-8") as f:
+        f.write(prompt)
+    print(f"[DEBUG] Prompt Ollama sauvegardé dans : {prompt_path}")
+
     result = call_ollama(prompt)
-    if result:
-        result = _clean_ollama_output(result)
-        # Nettoie au cas ou le modele renvoie du markdown ou des balises span
-        result = re.sub(r"<span[^>]*>", "", result)
-        result = result.replace("</span>", "")
-        result = result.strip()
-        if result:
-            return result
-    return raw_text
+    if result is not None:
+        with open(response_path, "w", encoding="utf-8") as f:
+            f.write(result)
+        print(f"[DEBUG] Réponse Ollama sauvegardée ({len(result)} chars) dans : {response_path}")
+
+        formatted = _parse_numbered_list(result, len(raw_events))
+        if formatted:
+            # Nettoyage sanitaire + normalisation des heures
+            cleaned = []
+            for f in formatted:
+                f = re.sub(r"<span[^>]*>", "", f)
+                f = f.replace("</span>", "")
+                f = _normalize_time(f)
+                cleaned.append(f.strip())
+            # Vérifier si le formatting a vraiment eu lieu
+            has_html = any("<strong>" in c or "<em>" in c for c in cleaned)
+            if not has_html:
+                print("[WARN] Ollama a répondu mais n'a pas appliqué de balises HTML. Fallback brut.")
+            return cleaned
+        else:
+            print(f"[WARN] Batch malformé (count mismatch vs {len(raw_events)} attendus). Fallback brut.")
+    else:
+        print("[WARN] Ollama n'a retourné aucune réponse (timeout ou erreur réseau). Fallback brut.")
+    return list(raw_events)
 
 
 def split_cell_events(lines):
@@ -368,6 +442,29 @@ def parse_google_doc():
 def generate_html(month_year, weeks):
     """Génère le HTML complet de programmation.html."""
 
+    # ── Pré-formatage batch des événements via Ollama (une seule requête) ──
+    formatted_map = {}
+    if USE_OLLAMA:
+        # Collecte ordonnée des événements uniques
+        seen = set()
+        unique_events = []
+        for week in weeks:
+            for d in week:
+                for ev in d["events"]:
+                    if ev not in seen:
+                        seen.add(ev)
+                        unique_events.append(ev)
+        if unique_events:
+            print(f"[OLLAMA] Formatage batch de {len(unique_events)} événements uniques...")
+            formatted_list = format_events_batch(unique_events)
+            success_count = sum(1 for raw, fmt in zip(unique_events, formatted_list) if fmt != raw)
+            print(f"[OLLAMA] {success_count}/{len(unique_events)} événements formatés par Ollama.")
+            for raw, fmt in zip(unique_events, formatted_list):
+                formatted_map[raw] = fmt
+
+    def fmt(ev):
+        return formatted_map.get(ev, ev) if USE_OLLAMA else ev
+
     # ── Desktop calendar ───────────────────────────────────────────────────
     desktop_rows = []
     for week in weeks:
@@ -378,7 +475,7 @@ def generate_html(month_year, weeks):
             if wd in day_map:
                 d = day_map[wd]
                 ev_html = "\n".join(
-                    f'                <span class="event {classify_event(ev)}">{format_event_with_ollama(ev) if USE_OLLAMA else ev}</span>'
+                    f'                <span class="event {classify_event(ev)}">{fmt(ev)}</span>'
                     for ev in d["events"]
                 )
                 cells.append(
@@ -417,7 +514,7 @@ def generate_html(month_year, weeks):
             if not d["events"]:
                 continue
             ev_html = "\n".join(
-                f'              <span class="event {classify_event(ev)}">{format_event_with_ollama(ev) if USE_OLLAMA else ev}</span>'
+                f'              <span class="event {classify_event(ev)}">{fmt(ev)}</span>'
                 for ev in d["events"]
             )
             month_name = month_year.split()[0]  # ex: "Juin"

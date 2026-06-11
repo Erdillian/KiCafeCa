@@ -22,9 +22,8 @@ jobs:
 
       - name: Lancer le script de mise a jour
         env:
-          OLLAMA_HOST: ${{ secrets.OLLAMA_HOST || 'https://ollama.com' }}
           OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
-          OLLAMA_MODEL: ${{ secrets.OLLAMA_MODEL || 'llama3.1:8b' }}
+          OLLAMA_MODEL: ${{ secrets.OLLAMA_MODEL || 'kimi-k2.6:cloud' }}
           USE_OLLAMA: ${{ secrets.USE_OLLAMA || 'true' }}
         run: python scripts/update_programmation.py
 
