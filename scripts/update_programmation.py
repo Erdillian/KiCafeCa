@@ -217,6 +217,13 @@ def _normalize_time(text: str) -> str:
         lambda m: f"{m.group(1)}h",
         text,
     )
+
+    # Post-traitement : réinsérer l'espace mangé avant les balises HTML / ⭐
+    text = re.sub(
+        r'(\d{1,2}h(?:\d{2})?)(<strong>|<em>|⭐)',
+        r'\1 \2',
+        text,
+    )
     return text
 
 
