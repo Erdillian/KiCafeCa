@@ -20,6 +20,14 @@
         <li class="nav-item"><a class="nav-link" href="/index.html">Accueil</a></li>
         <li class="nav-item"><a class="nav-link" href="/programmation.html">Programmation</a></li>
         <li class="nav-item"><a class="nav-link" href="/association.html">L'association</a></li>
+        <li class="nav-item nav-dropdown">
+          <button class="nav-link nav-dropdown-toggle" aria-expanded="false" aria-haspopup="true">Média</button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-link" href="/flyer_blanc.pdf">Flyer blanc</a></li>
+            <li><a class="dropdown-link" href="/flyer_creme.pdf">Flyer crème</a></li>
+            <li><a class="dropdown-link" href="/generateur-affiches.html">Générateur d'affiches</a></li>
+          </ul>
+        </li>
         <li class="nav-item"><a class="nav-link" href="/newsletters.html">Newsletters</a></li>
       </ul>
     </nav>
@@ -44,6 +52,7 @@
           <a href="/programmation.html">Programmation</a>
           <a href="/association.html">L'association</a>
           <a href="/newsletters.html">Newsletters</a>
+          <a href="/generateur-affiches.html">Média &amp; affiches</a>
         </div>
 
         <div class="footer-column footer-contact">
@@ -91,4 +100,22 @@
       inject('footer-placeholder', relativize(footerHTML));
     });
   }
+
+  // Dropdown toggle
+  document.addEventListener('DOMContentLoaded', function () {
+    var dropdowns = document.querySelectorAll('.nav-dropdown');
+    dropdowns.forEach(function (dd) {
+      var toggle = dd.querySelector('.nav-dropdown-toggle');
+      if (!toggle) return;
+      toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var isOpen = dd.classList.contains('open');
+        dropdowns.forEach(function (d) { d.classList.remove('open'); });
+        if (!isOpen) dd.classList.add('open');
+      });
+    });
+    document.addEventListener('click', function () {
+      dropdowns.forEach(function (d) { d.classList.remove('open'); });
+    });
+  });
 })();
