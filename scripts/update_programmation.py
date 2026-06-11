@@ -26,8 +26,9 @@ GOOGLE_DOC_ID = "1iXZjXpH8-j4PTD1x4FjOXIbGm1VlK3Dp1ajanU1_FRc"
 EXPORT_URL = f"https://docs.google.com/document/d/{GOOGLE_DOC_ID}/export?format=html"
 OUTPUT_FILE = os.path.join(os.path.dirname(__file__), "..", "programmation.html")
 
-OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://localhost:11434").rstrip("/")
+OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "https://ollama.com").rstrip("/")
 OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "llama3.1:8b")
+OLLAMA_API_KEY = os.environ.get("OLLAMA_API_KEY", "")
 USE_OLLAMA = os.environ.get("USE_OLLAMA", "true").lower() in ("1", "true", "yes")
 
 WEEKDAYS = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
@@ -117,10 +118,14 @@ def call_ollama(prompt: str) -> str | None:
         "options": {"temperature": 0.1, "num_predict": 150}
     }).encode("utf-8")
 
+    headers = {"Content-Type": "application/json"}
+    if OLLAMA_API_KEY:
+        headers["Authorization"] = f"Bearer {OLLAMA_API_KEY}"
+
     req = urllib.request.Request(
         url,
         data=payload,
-        headers={"Content-Type": "application/json"},
+        headers=headers,
         method="POST"
     )
     try:

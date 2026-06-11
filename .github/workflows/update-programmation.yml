@@ -1,4 +1,4 @@
-name: Mise à jour programmation
+name: Mise a jour programmation
 
 on:
   schedule:
@@ -20,7 +20,12 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Lancer le script de mise à jour
+      - name: Lancer le script de mise a jour
+        env:
+          OLLAMA_HOST: ${{ secrets.OLLAMA_HOST || 'https://ollama.com' }}
+          OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
+          OLLAMA_MODEL: ${{ secrets.OLLAMA_MODEL || 'llama3.1:8b' }}
+          USE_OLLAMA: ${{ secrets.USE_OLLAMA || 'true' }}
         run: python scripts/update_programmation.py
 
       - name: Commit & push si changement
