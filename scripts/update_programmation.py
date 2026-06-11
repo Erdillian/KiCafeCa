@@ -129,7 +129,7 @@ def call_ollama(user_content: str, num_predict: int = 150) -> str | None:
         method="POST"
     )
     try:
-        print(f"⏳ Attente de la reponse Ollama (jusqu'a 10 min)...")
+        print(f"⏳ Attente de la reponse de l'IA (jusqu'a 10 min)...")
         with urllib.request.urlopen(req, timeout=600) as resp:
             raw = resp.read().decode("utf-8")
             data = json.loads(raw)
@@ -142,10 +142,10 @@ def call_ollama(user_content: str, num_predict: int = 150) -> str | None:
             if not response_text:
                 print("⚠️  L'IA a renvoye une reponse vide — passage en mode texte brut")
                 return None
-            print("✅ Reponse Ollama recue")
+            print("✅ Reponse de l'IA recue")
             return response_text
     except Exception as e:
-        print(f"⚠️  Ollama indisponible ({type(e).__name__}: {e}) — passage en mode texte brut")
+        print(f"⚠️  L'IA est indisponible ({type(e).__name__}: {e}) — passage en mode texte brut")
         return None
 
 
@@ -460,7 +460,7 @@ def generate_html(month_year, weeks):
                         seen.add(ev)
                         unique_events.append(ev)
         if unique_events:
-            print(f"🤖 Envoi a Ollama ({len(unique_events)} evenements uniques a formater)...")
+            print(f"🤖 Envoi a l'IA ({len(unique_events)} evenements uniques a formater)...")
             formatted_list = format_events_batch(unique_events)
             success_count = sum(1 for raw, fmt in zip(unique_events, formatted_list) if fmt != raw)
             print(f"✨ {success_count}/{len(unique_events)} evenements mis en forme par l'IA")
@@ -775,7 +775,7 @@ def main():
     out_path = os.path.abspath(OUTPUT_FILE)
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(html_content)
-    print(f"✅ Fichier genere : {out_path}")
+    print("✅ Calendrier genere : programmation.html")
 
 
 if __name__ == "__main__":

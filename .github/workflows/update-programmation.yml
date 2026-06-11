@@ -44,3 +44,4 @@ jobs:
           git commit -m "Maj auto programmation.html depuis Google Doc"
           git push
           echo "🎉 Mise a jour publiee avec succes !"
+          echo "⏳ Le site se rafraichit en quelques secondes (cache GitHub Pages)."
