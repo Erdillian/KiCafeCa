@@ -19,6 +19,7 @@ import re
 import html as html_module
 import os
 import sys
+import calendar
 
 # ── Configuration ────────────────────────────────────────────────────────────
 
@@ -32,7 +33,25 @@ OLLAMA_API_KEY = os.environ.get("OLLAMA_API_KEY", "")
 USE_OLLAMA = os.environ.get("USE_OLLAMA", "true").lower() in ("1", "true", "yes")
 
 WEEKDAYS = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
-WEEKDAY_SHORT = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
+
+# Mapping mois français → numéro pour calendar.monthrange
+_MONTH_MAP = {
+    "janvier": 1, "février": 2, "mars": 3, "avril": 4, "mai": 5, "juin": 6,
+    "juillet": 7, "août": 8, "septembre": 9, "octobre": 10, "novembre": 11, "décembre": 12,
+}
+
+
+def _get_last_day(month_year: str) -> int:
+    """Renvoie le dernier jour du mois (ex: 'Juin 2026' → 30)."""
+    parts = month_year.split()
+    if len(parts) >= 2:
+        month_name = parts[0].lower()
+        year = int(parts[1])
+        month_num = _MONTH_MAP.get(month_name)
+        if month_num:
+            return calendar.monthrange(year, month_num)[1]
+    return 31  # fallback
+
 
 # Couleurs de header mobile par semaine
 WEEK_HEADER_COLORS = [
@@ -108,7 +127,7 @@ def classify_event(text: str) -> str:
     return "ev-special"
 
 
-def call_ollama(user_content: str, num_predict: int = 150) -> str | None:
+def call_ollama(user_content: str) -> str | None:
     """Appelle l'API REST Ollama (/api/chat) et renvoie le texte genere."""
     url = f"{OLLAMA_HOST}/api/chat"
     payload = json.dumps({
@@ -473,12 +492,13 @@ def generate_html(month_year, weeks):
         return formatted_map.get(ev, ev) if USE_OLLAMA else ev
 
     # ── Desktop calendar ───────────────────────────────────────────────────
+    last_day = _get_last_day(month_year)
     desktop_rows = []
     for week in weeks:
         cells = []
-        # On construit 7 colonnes
         day_map = {day["weekday"]: day for day in week}
-        for wd in WEEKDAYS:
+        present_indices = {WEEKDAYS.index(d["weekday"]): d["day"] for d in week}
+        for idx, wd in enumerate(WEEKDAYS):
             if wd in day_map:
                 d = day_map[wd]
                 ev_html = "\n".join(
@@ -492,8 +512,15 @@ def generate_html(month_year, weeks):
               </td>"""
                 )
             else:
+                # Déterminer si la case vide est hors mois
+                expected_day = None
+                if present_indices:
+                    ref_idx = min(present_indices.keys(), key=lambda k: abs(k - idx))
+                    ref_day = present_indices[ref_idx]
+                    expected_day = ref_day + (idx - ref_idx)
+                cls = "outside" if expected_day is not None and (expected_day < 1 or expected_day > last_day) else "empty"
                 cells.append(
-                    '              <td class="empty">\n                <div class="day-num"></div>\n              </td>'
+                    f'              <td class="{cls}">\n                <div class="day-num"></div>\n              </td>'
                 )
         desktop_rows.append("            <tr>\n" + "\n".join(cells) + "\n            </tr>")
 
