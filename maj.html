@@ -171,6 +171,28 @@
       text-align: center;
       flex-shrink: 0;
     }
+    .progress-substep {
+      margin: 4px 0 12px 34px;
+      padding: 6px 10px;
+      background: #fff;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      color: var(--espresso-light);
+      border-left: 3px solid var(--sand);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    .progress-substep.show {
+      display: block !important;
+    }
+    .progress-substep.done {
+      border-left-color: var(--mint);
+      color: var(--espresso);
+      animation: none;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -224,6 +246,9 @@
           <div class="progress-step" id="progress-wf">
             <span class="progress-icon">⏳</span>
             <span class="progress-label">Workflow en cours...</span>
+          </div>
+          <div class="progress-substep" id="progress-substep" style="display:none;">
+            <span class="substep-label"></span>
           </div>
           <div class="progress-step" id="progress-deploy">
             <span class="progress-icon">⏳</span>
@@ -282,16 +307,52 @@
         document.getElementById('progress-container').style.display = show ? 'block' : 'none';
       }
 
+      function setSubstep(label, cls) {
+        var el = document.getElementById('progress-substep');
+        if (!el) return;
+        el.querySelector('.substep-label').textContent = label || '';
+        el.className = 'progress-substep ' + (cls || '');
+        if (label) el.classList.add('show');
+        else el.classList.remove('show');
+      }
+
       function pollRun(token, runId) {
-        var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/actions/runs/' + runId;
+        var runUrl = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/actions/runs/' + runId;
+        var jobsUrl = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/actions/runs/' + runId + '/jobs';
         var interval = setInterval(function() {
-          fetch(url, {
-            headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' }
-          })
-          .then(function(r) { return r.json(); })
-          .then(function(run) {
+          // Recuperer le statut du run + les jobs en parallele
+          Promise.all([
+            fetch(runUrl, { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' } }).then(function(r){return r.json();}),
+            fetch(jobsUrl, { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' } }).then(function(r){return r.json();})
+          ])
+          .then(function(results) {
+            var run = results[0];
+            var jobsData = results[1];
+
+            // Trouver la step en cours
+            var currentStep = null;
+            if (jobsData && jobsData.jobs) {
+              for (var i = 0; i < jobsData.jobs.length; i++) {
+                var job = jobsData.jobs[i];
+                if (job.steps) {
+                  for (var s = 0; s < job.steps.length; s++) {
+                    var step = job.steps[s];
+                    if (step.status === 'in_progress') {
+                      currentStep = step.name;
+                      break;
+                    }
+                    if (step.status === 'queued') {
+                      currentStep = 'En attente : ' + step.name;
+                      break;
+                    }
+                  }
+                }
+              }
+            }
+
             if (run.status === 'completed') {
               clearInterval(interval);
+              setSubstep(currentStep || '', 'done');
               if (run.conclusion === 'success') {
                 setProgress('progress-wf', '✅', 'Workflow termine', 'done');
                 pollDeploy(token);
@@ -301,7 +362,11 @@
               }
               return;
             }
-            setProgress('progress-wf', '⏳', 'Workflow en cours... (' + run.status + ')', '');
+
+            setProgress('progress-wf', '⏳', 'Workflow en cours...', '');
+            if (currentStep) {
+              setSubstep('→ ' + currentStep, '');
+            }
           })
           .catch(function() {
             // Silencieux en cas d'erreur reseau
