@@ -23,7 +23,7 @@ import calendar
 
 # ── Configuration ────────────────────────────────────────────────────────────
 
-GOOGLE_DOC_ID = "1iXZjXpH8-j4PTD1x4FjOXIbGm1VlK3Dp1ajanU1_FRc"
+GOOGLE_DOC_ID = "1gICTPQ41s5MYTSsE3reG_2d3_8u3lX4CUndrvW42nag"
 EXPORT_URL = f"https://docs.google.com/document/d/{GOOGLE_DOC_ID}/export?format=html"
 OUTPUT_FILE = os.path.join(os.path.dirname(__file__), "..", "programmation.html")
 

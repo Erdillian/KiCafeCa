@@ -65,8 +65,8 @@ py -3 scripts/update_programmation.py
 - **Post-processing** : normalisation des heures (`17h/21h` → `17h-21h`, `18 H 30` → `18h30`).
 
 ### Google Doc source
-ID du doc : `1iXZjXpH8-j4PTD1x4FjOXIbGm1VlK3Dp1ajanU1_FRc`  
-Le titre doit contenir le mois et l'année (ex: `Programmation - Juin 2026`).
+L'ID du doc est mis à jour chaque mois ; actuellement (juillet 2026) : `1gICTPQ41s5MYTSsE3reG_2d3_8u3lX4CUndrvW42nag`.  
+Le titre doit contenir le mois et l'année (ex: `Programmation - Juillet 2026`).
 
 ### Fichiers générés (ne pas commiter)
 Les fichiers suivants sont créés à chaque exécution pour le debug :
