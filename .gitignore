@@ -39,3 +39,6 @@ API.txt
 scripts/ollama_prompt.txt
 scripts/ollama_response.txt
 scripts/ollama_raw.json
+
+# programmation.html est générée automatiquement depuis Google Doc via GitHub Action
+/programmation.html

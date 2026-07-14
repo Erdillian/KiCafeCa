@@ -76,9 +76,32 @@
 </button>`;
 
   function relativize(html) {
-    var path = window.location.pathname;
-    var dirs = path.split('/').slice(0, -1).filter(Boolean);
-    var prefix = dirs.map(function () { return '../'; }).join('');
+    // Calcule le chemin relatif depuis le dossier de la page courante
+    // jusqu'à la racine du site, en se basant sur l'emplacement de ce script (js/components.js).
+    // Fonctionne aussi bien en file:// (double-clic local) qu'en http://.
+    var scriptSrc = document.currentScript.src;
+    var siteRoot = scriptSrc.split('/').slice(0, -2).join('/') + '/';
+    var pageDir = window.location.href.split('/').slice(0, -1).join('/') + '/';
+
+    var rootParts = siteRoot.replace(/\/+$/, '').split('/');
+    var pageParts = pageDir.replace(/\/+$/, '').split('/');
+
+    var i = 0;
+    while (i < rootParts.length && i < pageParts.length && rootParts[i] === pageParts[i]) {
+      i++;
+    }
+
+    var upCount = pageParts.length - i;
+    var prefix = '';
+    for (var j = 0; j < upCount; j++) {
+      prefix += '../';
+    }
+
+    var remaining = rootParts.slice(i).join('/');
+    if (remaining) {
+      prefix += remaining + '/';
+    }
+
     return html.replace(/href="\//g, 'href="' + prefix)
                .replace(/src="\//g, 'src="' + prefix);
   }
