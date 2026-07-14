@@ -961,6 +961,12 @@ li { margin-bottom: 0.5rem; }
 .value-icon-olive { border: 1px solid var(--olive); }
 .value-icon-blush { border: 1px solid var(--blush); }
 
+/* Liserets colorés pour les cards de valeurs */
+.card-value-terracotta { border-top: 4px solid var(--terracotta); }
+.card-value-gold { border-top: 4px solid var(--gold); }
+.card-value-olive { border-top: 4px solid var(--olive); }
+.card-value-blush { border-top: 4px solid var(--blush); }
+
 .value-icon {
   width: 56px;
   height: 56px;
