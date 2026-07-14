@@ -947,11 +947,11 @@ li { margin-bottom: 0.5rem; }
 }
 
 .value-heading h3 {
-  line-height: 1.2;
+  line-height: 1;
 }
 
 .value-heading .value-icon {
-  margin-top: -4px;
+  margin-top: 0;
 }
 
 /* Contours colorés discrets pour les value-icon des implications */
