@@ -935,13 +935,13 @@ li { margin-bottom: 0.5rem; }
 
 .value-heading {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--spacing-md);
   margin-bottom: var(--spacing-md);
 }
 
-.value-heading .value-icon {
-  margin-top: -2px;
+.value-heading h3 {
+  line-height: 1.2;
 }
 
 .value-icon {
