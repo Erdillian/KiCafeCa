@@ -948,6 +948,7 @@ li { margin-bottom: 0.5rem; }
 
 .value-heading h3 {
   line-height: 1.2;
+  margin-top: 2px;
 }
 
 .value-icon {
