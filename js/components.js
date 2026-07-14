@@ -19,7 +19,13 @@
       <ul class="nav-list" id="main-nav">
         <li class="nav-item"><a class="nav-link" href="/index.html">Accueil</a></li>
         <li class="nav-item"><a class="nav-link" href="/programmation.html">Programmation</a></li>
-        <li class="nav-item"><a class="nav-link" href="/association.html">L'association</a></li>
+        <li class="nav-item nav-dropdown">
+          <button class="nav-link nav-dropdown-toggle" aria-expanded="false" aria-haspopup="true">L'association</button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-link" href="/qui-sommes-nous.html">Qui sommes-nous ?</a></li>
+            <li><a class="dropdown-link" href="/comment-s-investir.html">Comment s'investir ?</a></li>
+          </ul>
+        </li>
         <li class="nav-item nav-dropdown">
           <button class="nav-link nav-dropdown-toggle" aria-expanded="false" aria-haspopup="true">Média</button>
           <ul class="dropdown-menu">
@@ -50,7 +56,8 @@
         <div class="footer-column footer-links">
           <a href="/index.html">Accueil</a>
           <a href="/programmation.html">Programmation</a>
-          <a href="/association.html">L'association</a>
+          <a href="/qui-sommes-nous.html">Qui sommes-nous ?</a>
+          <a href="/comment-s-investir.html">Comment s'investir ?</a>
           <a href="/newsletters.html">Newsletters</a>
           <a href="/generateur-affiches.html">Média &amp; affiches</a>
         </div>

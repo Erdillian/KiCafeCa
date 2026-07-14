@@ -180,7 +180,16 @@ button.print:hover{background:#a93226}
   .stage{padding:0;margin:0;height:auto;overflow:visible;display:block;align-items:initial}
   .sheet-wrap{box-shadow:none;border-radius:0;width:210mm!important;height:297mm!important;margin:0}
   .scaler{transform:none!important}
-  .sheet{box-shadow:none}
+  .sheet,
+  .sheet .accent,
+  .sheet .accent2,
+  .sheet .ev-tag,
+  .sheet .rule,
+  .sheet .when .v{
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+  }
 }
 
 .stagehead{font-size:12px;color:var(--ardoise);letter-spacing:1px;
@@ -209,7 +218,7 @@ button.print:hover{background:#a93226}
       <b>Hello ! Tu organises un atelier, un concert ou une soirée au KiCaféÇa ?</b><br>
       Pas de panique pour la comm' : ce petit outil te confectionne une affiche toute propre en direct.
       Choisis le type d'événement, remplis les infos, ajoute une photo si tu veux, et hop — l'affiche se met à jour toute seule.<br>
-      Quand c'est bon, clique sur <b>Imprimer / Exporter en PDF</b> et choisis « Enregistrer en PDF » pour l'envoyer à l'imprimeur ou la partager en ligne.
+      Quand c'est bon, clique sur <b>Imprimer / Exporter en PDF</b>, choisis « Enregistrer en PDF » et télécharge ton affiche prête à imprimer.
     </div>
 
     <label class="l">Type d'événement</label>
