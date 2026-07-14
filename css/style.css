@@ -263,6 +263,12 @@ li { margin-bottom: 0.5rem; }
   box-shadow: var(--shadow-sm);
 }
 
+/* Bordures colorées pour les 4 formules d'engagement */
+.card-implication-terracotta { border-top: 4px solid var(--terracotta); }
+.card-implication-gold { border-top: 4px solid var(--gold); }
+.card-implication-olive { border-top: 4px solid var(--olive); }
+.card-implication-blush { border-top: 4px solid var(--blush); }
+
 /* --- 5. BADGES --- */
 
 .badge {
