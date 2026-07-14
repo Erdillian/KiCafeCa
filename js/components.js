@@ -82,11 +82,17 @@
   </svg>
 </button>`;
 
+  // Chemin du script mémorisé dès le chargement, car document.currentScript
+  // devient null une fois l'exécution synchrone terminée (notamment au DOMContentLoaded).
+  var componentsScriptSrc = document.currentScript ? document.currentScript.src : '';
+
   function relativize(html) {
     // Calcule le chemin relatif depuis le dossier de la page courante
     // jusqu'à la racine du site, en se basant sur l'emplacement de ce script (js/components.js).
     // Fonctionne aussi bien en file:// (double-clic local) qu'en http://.
-    var scriptSrc = document.currentScript.src;
+    var scriptSrc = componentsScriptSrc || (document.currentScript ? document.currentScript.src : '');
+    if (!scriptSrc) return html;
+
     var siteRoot = scriptSrc.split('/').slice(0, -2).join('/') + '/';
     var pageDir = window.location.href.split('/').slice(0, -1).join('/') + '/';
 
