@@ -948,8 +948,16 @@ li { margin-bottom: 0.5rem; }
 
 .value-heading h3 {
   line-height: 1.2;
-  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  min-height: 56px;
 }
+
+/* Contours colorés pour les value-icon des implications */
+.value-icon-terracotta { border: 2px solid var(--terracotta); }
+.value-icon-gold { border: 2px solid var(--gold); }
+.value-icon-olive { border: 2px solid var(--olive); }
+.value-icon-blush { border: 2px solid var(--blush); }
 
 .value-icon {
   width: 56px;
