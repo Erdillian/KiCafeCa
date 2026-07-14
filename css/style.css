@@ -260,7 +260,7 @@ li { margin-bottom: 0.5rem; }
   transition: none;
 }
 
-.page-association .card-static:hover {
+.card-static:hover {
   transform: none;
   box-shadow: var(--shadow-sm);
 }
