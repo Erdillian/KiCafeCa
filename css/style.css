@@ -201,8 +201,7 @@ li { margin-bottom: 0.5rem; }
 }
 
 .btn:hover, .btn:focus {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-md);
 }
 
 .btn-outline {
@@ -215,8 +214,7 @@ li { margin-bottom: 0.5rem; }
 .btn-outline:hover, .btn-outline:focus {
   background: var(--gradient-terracotta);
   color: var(--cream);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-secondary {
@@ -937,9 +935,13 @@ li { margin-bottom: 0.5rem; }
 
 .value-heading {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--spacing-md);
   margin-bottom: var(--spacing-md);
+}
+
+.value-heading .value-icon {
+  margin-top: -2px;
 }
 
 .value-icon {
