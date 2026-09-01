@@ -1,9 +1,9 @@
 name: Mise a jour programmation
 
 on:
-  schedule:
-    - cron: '0 8 * * *'        # 8h UTC tous les jours
-  workflow_dispatch:           # Lancement manuel depuis l'interface GitHub
+  # schedule:                  # Desactive pendant le demenagement
+  #   - cron: '0 8 * * *'      # 8h UTC tous les jours
+  workflow_dispatch:           # Lancement manuel depuis l'interface GitHub uniquement
 
 permissions:
   contents: write
