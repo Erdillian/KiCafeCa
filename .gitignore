@@ -42,3 +42,7 @@ scripts/ollama_raw.json
 
 # programmation.html est générée automatiquement depuis Google Doc via GitHub Action
 /programmation.html
+
+# Dossiers de travail local pour présentations
+slides-export/
+Presentation Mairie/

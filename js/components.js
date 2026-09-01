@@ -5,7 +5,7 @@
 <aside class="site-alert" role="alert">
   <div class="container site-alert-inner">
     <span class="site-alert-text">
-      <span aria-hidden="true">⚠️</span> Le KiCaféÇa déménage — dernier jour dans notre local actuel : dimanche 13 septembre 2026. On cherche un nouveau lieu sur Joyeuse !
+      <span aria-hidden="true">⚠️</span> Le KiCaféÇa déménage ! Dernier jour dans notre local actuel : dimanche 13 septembre 2026. On cherche un nouveau lieu sur Joyeuse et alentours !
     </span>
     <a href="/index.html#demenagement" class="site-alert-link">Nous aider →</a>
   </div>

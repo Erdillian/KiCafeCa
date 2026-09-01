@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KiCaféÇa — Bilan de 6 mois</title>
+  <meta name="description" content="Bilan des 6 premiers mois d'activité du KiCaféÇa, café associatif à Joyeuse et alentours.">
+  <meta name="author" content="KiCaféÇa">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="KiCaféÇa — Bilan de 6 mois">
+  <meta property="og:description" content="Présentation du bilan des 6 mois d'activité du KiCaféÇa à destination de la mairie et des partenaires.">
+  <meta property="og:url" content="https://www.kicafeca.fr/bilan.html">
+  <meta property="og:image" content="https://www.kicafeca.fr/images/Logo.png">
+
+  <!-- Favicon -->
+  <link rel="icon" href="images/favicon.ico">
+  <link rel="apple-touch-icon" href="images/Logo.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .slides-page {
+      background: var(--cream);
+      min-height: calc(100vh - 64px);
+      display: flex;
+      flex-direction: column;
+      padding: var(--spacing-xl) 0;
+    }
+
+    .slides-intro {
+      text-align: center;
+      max-width: var(--container-md);
+      margin: 0 auto var(--spacing-xl) auto;
+      padding: 0 var(--spacing-md);
+    }
+
+    .slides-intro h1 {
+      font-size: 2.5rem;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .slides-intro p {
+      color: var(--ink-light);
+      font-size: 1.125rem;
+      margin: 0;
+    }
+
+    .slides-embed-container {
+      flex: 1;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slides-embed {
+      width: 100%;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .slides-embed iframe {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      border: none;
+      border-radius: var(--radius-lg);
+    }
+
+    @media (max-width: 768px) {
+      .slides-page { padding: var(--spacing-md) 0; }
+      .slides-intro h1 { font-size: 2rem; }
+      .slides-intro p { font-size: 1rem; }
+      .slides-embed iframe { aspect-ratio: 4 / 3; }
+    }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <script src="js/components.js"></script>
+
+  <main class="slides-page" id="contenu">
+    <div class="slides-intro">
+      <h1>Bilan de 6 mois</h1>
+      <p>Présentation du KiCaféÇa à destination de la mairie et des partenaires.</p>
+    </div>
+
+    <div class="slides-embed-container">
+      <div class="slides-embed">
+        <iframe
+          src="https://docs.google.com/presentation/d/1dqf3pWV0xdf_Cq7zq6UDq6DNZZJhGIXZVrzU_mp4Irg/embed?start=false&loop=false&delayms=3000"
+          title="Présentation Google Slides — Le KiCaféÇa"
+          allowfullscreen
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+  <script src="js/main.js"></script>
+</body>
+</html>
