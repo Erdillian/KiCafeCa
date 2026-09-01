@@ -1,6 +1,16 @@
 (function () {
   'use strict';
 
+  var alertHTML = `
+<aside class="site-alert" role="alert">
+  <div class="container site-alert-inner">
+    <span class="site-alert-text">
+      <span aria-hidden="true">⚠️</span> Le KiCaféÇa déménage — dernier jour dans notre local actuel : dimanche 13 septembre 2026. On cherche un nouveau lieu sur Joyeuse !
+    </span>
+    <a href="/index.html#demenagement" class="site-alert-link">Nous aider →</a>
+  </div>
+</aside>`;
+
   var headerHTML = `
 <header class="site-header">
   <div class="container header-inner">
@@ -64,7 +74,7 @@
 
         <div class="footer-column footer-contact">
           <a href="mailto:kicafeca@etik.com">kicafeca@etik.com</a>
-          <span>ou passez voir au café !</span>
+          <span>Local en transition — Joyeuse, Ardèche</span>
         </div>
       </div>
     </div>
@@ -127,7 +137,7 @@
   }
 
   // Header : synchrone, le script est placé juste après le placeholder
-  inject('header-placeholder', relativize(headerHTML));
+  inject('header-placeholder', relativize(alertHTML + headerHTML));
 
   // Footer : le placeholder n'existe pas encore au moment de l'exécution,
   // on attend que le DOM soit complet
@@ -146,12 +156,23 @@
       toggle.addEventListener('click', function (e) {
         e.stopPropagation();
         var isOpen = dd.classList.contains('open');
-        dropdowns.forEach(function (d) { d.classList.remove('open'); });
-        if (!isOpen) dd.classList.add('open');
+        dropdowns.forEach(function (d) {
+          d.classList.remove('open');
+          var t = d.querySelector('.nav-dropdown-toggle');
+          if (t) t.setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          dd.classList.add('open');
+          toggle.setAttribute('aria-expanded', 'true');
+        }
       });
     });
     document.addEventListener('click', function () {
-      dropdowns.forEach(function (d) { d.classList.remove('open'); });
+      dropdowns.forEach(function (d) {
+        d.classList.remove('open');
+        var t = d.querySelector('.nav-dropdown-toggle');
+        if (t) t.setAttribute('aria-expanded', 'false');
+      });
     });
   });
 })();

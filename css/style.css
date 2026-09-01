@@ -290,6 +290,43 @@ li { margin-bottom: 0.5rem; }
   box-shadow: 0 2px 8px rgba(212, 166, 78, 0.3);
 }
 
+/* --- 6. ALERT BANNER --- */
+
+.site-alert {
+  background: var(--terracotta);
+  color: var(--cream);
+  padding: var(--spacing-sm) 0;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+
+.site-alert-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm) var(--spacing-md);
+  text-align: center;
+}
+
+.site-alert-text {
+  font-weight: 500;
+}
+
+.site-alert-link {
+  color: var(--cream);
+  font-weight: 700;
+  text-decoration: underline;
+  white-space: nowrap;
+  padding: 0.15rem 0;
+}
+
+.site-alert-link:hover,
+.site-alert-link:focus {
+  color: var(--gold-light);
+  text-decoration: none;
+}
+
 /* --- 6. HEADER & NAVIGATION --- */
 
 .site-header {
@@ -1217,6 +1254,32 @@ li { margin-bottom: 0.5rem; }
 
   .day-num { font-size: 0.875rem; }
   .event { font-size: 0.65rem; }
+}
+
+/* --- 15. AIDE LISTES --- */
+
+.help-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--spacing-lg) 0;
+}
+
+.help-list li {
+  position: relative;
+  padding-left: 1.75rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.help-list li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--terracotta);
+  font-weight: 700;
+}
+
+.help-list strong {
+  color: var(--terracotta-dark);
 }
 
 /* Reduced motion */
